@@ -1,0 +1,825 @@
+<?xml version="1.0" encoding="windows-1252" ?>
+<Reports>
+<!--
+///////////////////////////////////////////////////////
+//
+// VSReport Report Definition File
+//
+// This file contains the following reports:
+//
+//   1) Request for Quote
+//
+///////////////////////////////////////////////////////
+-->
+
+  <!-- Report *** Request for Quote *** -->
+  <Report>
+    <Name>Request for Quote</Name>
+    <Layout>
+      <Width>10800</Width>
+      <MarginLeft>720</MarginLeft>
+      <MarginTop>720</MarginTop>
+      <MarginRight>720</MarginRight>
+      <MarginBottom>720</MarginBottom>
+      <Orientation>1</Orientation>
+    </Layout>
+    <Groups>
+      <Group>
+        <Name>Group 1</Name>
+        <GroupBy>contact_id</GroupBy>
+      </Group>
+    </Groups>
+    <Sections>
+      <Section>
+        <Name>Detail</Name>
+        <Height>360</Height>
+        <OnPrint>if print_price = 0 then
+   txtListPrice.visible = false
+   txtPct_multiplier.visible = false
+else
+   txtListPrice.visible = true
+   txtPct_multiplier.visible = true
+end if</OnPrint>
+      </Section>
+      <Section>
+        <Name>Header</Name>
+        <Type>1</Type>
+        <OnPrint>if suppress_addressee = 1 then
+ txtAttention_name.visible = false
+ txtCompany_name.visible = false
+ txtAddress.visible = false
+ txtCity_st_zip.visible = false
+ txtFax.visible = false
+ lAttn.visible = false
+ lFax.visible = false
+ txtContact_name.visible = false
+ txtActionHeader.visible = true
+ txtRfqText.visible = false
+else
+ txtRfqText.visible = true
+ txtActionHeader.visible = false
+ txtAttention_name.visible = true
+ txtCompany_name.visible = true
+ txtAddress.visible = true
+ txtCity_st_zip.visible = true
+ txtFax.visible = true
+ txtEmail.visible = true
+ lAttn.visible = true
+ lFax.visible = true
+ txtContact_name.visible = true
+end if
+
+if print_price = 1 then
+  lPrevAmt.visible = true
+  lMultPct.visible = true
+else
+  lPrevAmt.visible = false
+  lMultPct.visible = false
+end if</OnPrint>
+      </Section>
+      <Section>
+        <Name>Footer</Name>
+        <Type>2</Type>
+        <Visible>0</Visible>
+      </Section>
+      <Section>
+        <Name>Page Header</Name>
+        <Type>3</Type>
+        <Height>1985</Height>
+        <CanShrink>-1</CanShrink>
+        <OnPrint>if ([Page] &gt; 1) then
+ lPg.visible = true
+ lPg1.visible = true
+ lPg2.visible = true
+ lPg3.visible = true
+ if (print_price = 1) then
+  lblPrevDollar.visible = true
+  lPg5.visible = true
+ else
+  lblPrevDollar.visible = false
+  lPg5.visible = false
+ end if
+ lPg6.visible = true
+ lPg7.visible = true
+ Line.visible = true
+else
+ lPg.visible = false
+ lPg1.visible = false
+ lPg2.visible = false
+ lPg3.visible = false
+ lblPrevDollar.visible = false
+ lPg5.visible = false
+ lPg6.visible = false
+ lPg7.visible = false
+ Line.visible = false
+end if</OnPrint>
+      </Section>
+      <Section>
+        <Name>Page Footer</Name>
+        <Type>4</Type>
+        <Height>365</Height>
+      </Section>
+      <Section>
+        <Name>Group 0 Header</Name>
+        <Type>5</Type>
+        <Height>4455</Height>
+        <OnPrint>if suppress_addressee = 1 then
+          txtAttention_name.visible = false
+          txtCompany_name.visible = false
+          txtAddress.visible = false
+          txtCity_st_zip.visible = false
+          txtFax.visible = false
+          txtEmail.visible = false
+          lAttn.visible = false
+          lFax.visible = false
+          txtContact_name.visible = false
+          txtActionHeader.visible = true
+          txtRfqText.visible = false
+          else
+          txtRfqText.visible = true
+          txtActionHeader.visible = false
+          txtAttention_name.visible = true
+          txtCompany_name.visible = true
+          txtAddress.visible = true
+          txtCity_st_zip.visible = true
+          txtFax.visible = true
+          txtEmail.visible = true
+          lAttn.visible = true
+          lFax.visible = true
+          txtContact_name.visible = true
+          end if
+
+          if print_price = 1 then
+          lPg1ColHd7.visible = true
+          lPg1ColHd8.visible = true
+          else
+          lPg1ColHd7.visible = false
+          lPg1ColHd8.visible = false
+          end if</OnPrint>
+      </Section>
+      <Section>
+        <Name>Group 0 Footer</Name>
+        <Type>6</Type>
+        <Visible>0</Visible>
+      </Section>
+    </Sections>
+    <Fields>
+      <Field>
+        <Name>FooterRight</Name>
+        <Section>4</Section>
+        <Text>"Page " &amp; [Page] &amp; " of " &amp; [Pages]</Text>
+        <Calculated>-1</Calculated>
+        <Left>2880</Left>
+        <Width>4680</Width>
+        <Height>300</Height>
+        <Align>1</Align>
+      </Field>
+      <Field>
+        <Name>item_numCtl</Name>
+        <Section>0</Section>
+        <Text>material</Text>
+        <Calculated>-1</Calculated>
+        <Top>10</Top>
+        <Width>1635</Width>
+        <Height>270</Height>
+        <Align>0</Align>
+        <CanGrow>-1</CanGrow>
+      </Field>
+      <Field>
+        <Name>list_priceCtl</Name>
+        <Section>0</Section>
+        <Text>tech_desc</Text>
+        <Calculated>-1</Calculated>
+        <Left>1615</Left>
+        <Width>3975</Width>
+        <Height>270</Height>
+        <Align>0</Align>
+        <CanGrow>-1</CanGrow>
+      </Field>
+      <Field>
+        <Name>txtPurchase_unit</Name>
+        <Section>0</Section>
+        <Text>purchase_unit</Text>
+        <Calculated>-1</Calculated>
+        <Left>5674</Left>
+        <Width>555</Width>
+        <Height>285</Height>
+        <Align>2</Align>
+      </Field>
+      <Field>
+        <Name>mp_contact_idCtl</Name>
+        <Section>0</Section>
+        <Text>item_num</Text>
+        <Calculated>-1</Calculated>
+        <Left>6397</Left>
+        <Width>1095</Width>
+        <Height>285</Height>
+        <Align>0</Align>
+        <CanGrow>-1</CanGrow>
+      </Field>
+      <Field>
+        <Name>txtPct_multiplier</Name>
+        <Section>0</Section>
+        <Text>pct_multiplier</Text>
+        <Calculated>-1</Calculated>
+        <Left>8728</Left>
+        <Width>495</Width>
+        <Height>285</Height>
+        <Align>2</Align>
+      </Field>
+      <Field>
+        <Name>txtListPrice</Name>
+        <Section>0</Section>
+        <Text>list_price</Text>
+        <Calculated>-1</Calculated>
+        <Format>#,###.##</Format>
+        <Left>7560</Left>
+        <Width>1020</Width>
+        <Height>285</Height>
+        <Align>2</Align>
+        <CanGrow>-1</CanGrow>
+      </Field>
+      <Field>
+        <Name>Line2</Name>
+        <Section>0</Section>
+        <Top>360</Top>
+        <Width>10800</Width>
+        <BorderStyle>1</BorderStyle>
+        <LineSlant>2</LineSlant>
+      </Field>
+      <Field>
+        <Name>TitleLbl1</Name>
+        <Section>3</Section>
+        <Text>Request for Quote</Text>
+        <Left>2880</Left>
+        <Width>4335</Width>
+        <Height>465</Height>
+        <Align>1</Align>
+        <Font>
+          <Size>18</Size>
+          <Bold>-1</Bold>
+        </Font>
+      </Field>
+      <Field>
+        <Name>Label15</Name>
+        <Section>3</Section>
+        <Text>RSMeans
+1099 Hingham Street
+Ste. 201
+Rockland, MA 02370</Text>
+        <Left>4140</Left>
+        <Top>445</Top>
+        <Width>1905</Width>
+        <Height>825</Height>
+        <Align>7</Align>
+        <Font>
+          <Bold>-1</Bold>
+        </Font>
+      </Field>
+      <Field>
+        <Name>Label16</Name>
+        <Section>3</Section>
+        <Text>now()</Text>
+        <Calculated>-1</Calculated>
+        <Format>Short Date</Format>
+        <Top>85</Top>
+        <Width>1995</Width>
+        <Height>285</Height>
+        <Font>
+          <Size>9.75</Size>
+          <Bold>-1</Bold>
+        </Font>
+      </Field>
+      <Field>
+        <Name>Picture1</Name>
+        <Section>3</Section>
+        <Left>8280</Left>
+        <Width>2265</Width>
+        <Height>555</Height>
+        <Picture>Request for QuotePic1.gif</Picture>
+      </Field>
+      <Field>
+        <Name>Line</Name>
+        <Section>3</Section>
+        <Top>1890</Top>
+        <Width>10800</Width>
+        <ForeColor>12632256</ForeColor>
+        <BorderStyle>1</BorderStyle>
+        <LineWidth>50</LineWidth>
+        <BorderColor>12632256</BorderColor>
+        <LineSlant>2</LineSlant>
+        <Visible>0</Visible>
+        <Font>
+          <Size>12</Size>
+        </Font>
+      </Field>
+      <Field>
+        <Name>lPg</Name>
+        <Section>3</Section>
+        <Text>Means Mat. No.</Text>
+        <Top>1530</Top>
+        <Width>1545</Width>
+        <Height>270</Height>
+        <Align>0</Align>
+        <Visible>0</Visible>
+        <Font>
+          <Size>9.75</Size>
+          <Bold>-1</Bold>
+        </Font>
+      </Field>
+      <Field>
+        <Name>lPg1</Name>
+        <Section>3</Section>
+        <Text>Description</Text>
+        <Left>1620</Left>
+        <Top>1530</Top>
+        <Width>2700</Width>
+        <Height>270</Height>
+        <Align>0</Align>
+        <Visible>0</Visible>
+        <Font>
+          <Size>9.75</Size>
+          <Bold>-1</Bold>
+        </Font>
+      </Field>
+      <Field>
+        <Name>lPg2</Name>
+        <Section>3</Section>
+        <Text>UOM</Text>
+        <Left>5665</Left>
+        <Top>1530</Top>
+        <Width>540</Width>
+        <Height>270</Height>
+        <Align>2</Align>
+        <Visible>0</Visible>
+        <Font>
+          <Size>9.75</Size>
+          <Bold>-1</Bold>
+        </Font>
+      </Field>
+      <Field>
+        <Name>lPg3</Name>
+        <Section>3</Section>
+        <Text>Item No</Text>
+        <Left>6397</Left>
+        <Top>1530</Top>
+        <Width>1005</Width>
+        <Height>270</Height>
+        <Align>1</Align>
+        <Visible>0</Visible>
+        <Font>
+          <Size>9.75</Size>
+          <Bold>-1</Bold>
+        </Font>
+      </Field>
+      <Field>
+        <Name>lblPrevDollar</Name>
+        <Section>3</Section>
+        <Text>Prev. $</Text>
+        <Left>7470</Left>
+        <Top>1530</Top>
+        <Width>1095</Width>
+        <Height>270</Height>
+        <Align>2</Align>
+        <Visible>0</Visible>
+        <Font>
+          <Size>9.75</Size>
+          <Bold>-1</Bold>
+        </Font>
+      </Field>
+      <Field>
+        <Name>lPg5</Name>
+        <Section>3</Section>
+        <Text>% Mult</Text>
+        <Left>8640</Left>
+        <Top>1530</Top>
+        <Width>630</Width>
+        <Height>270</Height>
+        <Align>2</Align>
+        <Visible>0</Visible>
+        <Font>
+          <Size>9.75</Size>
+          <Bold>-1</Bold>
+        </Font>
+      </Field>
+      <Field>
+        <Name>lPg6</Name>
+        <Section>3</Section>
+        <Text>New $</Text>
+        <Left>9360</Left>
+        <Top>1530</Top>
+        <Width>630</Width>
+        <Height>270</Height>
+        <Align>2</Align>
+        <Visible>0</Visible>
+        <Font>
+          <Size>9.75</Size>
+          <Bold>-1</Bold>
+        </Font>
+      </Field>
+      <Field>
+        <Name>lPg7</Name>
+        <Section>3</Section>
+        <Text>% Mult</Text>
+        <Left>9990</Left>
+        <Top>1530</Top>
+        <Width>720</Width>
+        <Height>270</Height>
+        <Align>2</Align>
+        <Visible>0</Visible>
+        <Font>
+          <Size>9.75</Size>
+          <Bold>-1</Bold>
+        </Font>
+      </Field>
+      <Field>
+        <Name>Line1</Name>
+        <Section>5</Section>
+        <Top>4410</Top>
+        <Width>10800</Width>
+        <ForeColor>12632256</ForeColor>
+        <BorderStyle>1</BorderStyle>
+        <LineWidth>50</LineWidth>
+        <BorderColor>12632256</BorderColor>
+        <LineSlant>2</LineSlant>
+        <Font>
+          <Size>12</Size>
+        </Font>
+      </Field>
+      <Field>
+        <Name>lUserFax</Name>
+        <Section>5</Section>
+        <Text>Fax:</Text>
+        <Left>3600</Left>
+        <Width>735</Width>
+        <Height>375</Height>
+        <Font>
+          <Size>18</Size>
+          <Bold>-1</Bold>
+        </Font>
+      </Field>
+      <Field>
+        <Name>txtUserFax</Name>
+        <Section>5</Section>
+        <Text>user_fax</Text>
+        <Calculated>-1</Calculated>
+        <Left>4410</Left>
+        <Width>2265</Width>
+        <Height>360</Height>
+        <Font>
+          <Size>18</Size>
+          <Bold>-1</Bold>
+        </Font>
+      </Field>
+      <Field>
+        <Name>lAttn</Name>
+        <Section>5</Section>
+        <Text>Attn:</Text>
+        <Left>120</Left>
+        <Top>450</Top>
+        <Width>450</Width>
+        <Height>270</Height>
+        <Font>
+          <Bold>-1</Bold>
+        </Font>
+      </Field>
+      <Field>
+        <Name>txtAddress</Name>
+        <Section>5</Section>
+        <Text>address</Text>
+        <Calculated>-1</Calculated>
+        <Left>120</Left>
+        <Top>990</Top>
+        <Width>3615</Width>
+        <Height>270</Height>
+        <Font>
+          <Size>9.75</Size>
+        </Font>
+      </Field>
+      <Field>
+        <Name>txtCompany_name</Name>
+        <Section>5</Section>
+        <Text>company_name</Text>
+        <Calculated>-1</Calculated>
+        <Left>120</Left>
+        <Top>720</Top>
+        <Width>3615</Width>
+        <Height>285</Height>
+        <Font>
+          <Size>9.75</Size>
+        </Font>
+      </Field>
+      <Field>
+        <Name>txtAttention_name</Name>
+        <Section>5</Section>
+        <Text>attention_name</Text>
+        <Calculated>-1</Calculated>
+        <Left>625</Left>
+        <Top>450</Top>
+        <Width>3165</Width>
+        <Height>270</Height>
+        <Font>
+          <Bold>-1</Bold>
+        </Font>
+      </Field>
+      <Field>
+        <Name>txtCity_st_zip</Name>
+        <Section>5</Section>
+        <Text>city_st_zip</Text>
+        <Calculated>-1</Calculated>
+        <Left>120</Left>
+        <Top>1260</Top>
+        <Width>3615</Width>
+        <Height>270</Height>
+        <Font>
+          <Size>9.75</Size>
+        </Font>
+      </Field>
+      <Field>
+        <Name>txtFax</Name>
+        <Section>5</Section>
+        <Text>fax</Text>
+        <Calculated>-1</Calculated>
+        <Left>570</Left>
+        <Top>1530</Top>
+        <Width>1890</Width>
+        <Height>270</Height>
+        <Font>
+          <Size>9.75</Size>
+        </Font>
+      </Field>
+      <Field>
+        <Name>txtContact_name</Name>
+        <Section>5</Section>
+        <Text>"Dear " + contact_name</Text>
+        <Calculated>-1</Calculated>
+        <Left>90</Left>
+        <Top>2250</Top>
+        <Width>4245</Width>
+        <Height>270</Height>
+        <Font>
+          <Size>9.75</Size>
+        </Font>
+      </Field>
+      <Field>
+        <Name>lThankyou</Name>
+        <Section>5</Section>
+        <Text>Thank you for your help.</Text>
+        <Left>90</Left>
+        <Top>3060</Top>
+        <Width>2805</Width>
+        <Height>285</Height>
+        <Font>
+          <Size>9.75</Size>
+        </Font>
+      </Field>
+      <Field>
+        <Name>txtUserName</Name>
+        <Section>5</Section>
+        <Text>user_name</Text>
+        <Calculated>-1</Calculated>
+        <Left>90</Left>
+        <Top>3330</Top>
+        <Width>2805</Width>
+        <Height>270</Height>
+        <Font>
+          <Bold>-1</Bold>
+          <Italic>-1</Italic>
+        </Font>
+      </Field>
+      <Field>
+        <Name>txtRfqText</Name>
+        <Section>5</Section>
+        <Text>rfq_text</Text>
+        <Calculated>-1</Calculated>
+        <Left>90</Left>
+        <Top>2700</Top>
+        <Width>10620</Width>
+        <Height>270</Height>
+        <CanGrow>-1</CanGrow>
+        <Font>
+          <Size>9.75</Size>
+        </Font>
+      </Field>
+      <Field>
+        <Name>lContactID</Name>
+        <Section>5</Section>
+        <Text>contact_id</Text>
+        <Calculated>-1</Calculated>
+        <Left>9360</Left>
+        <Top>3690</Top>
+        <Width>1350</Width>
+        <Height>270</Height>
+        <Align>2</Align>
+      </Field>
+      <Field>
+        <Name>lPg1ColHd1</Name>
+        <Section>5</Section>
+        <Text>Means Mat. No.</Text>
+        <Top>4050</Top>
+        <Width>1545</Width>
+        <Height>270</Height>
+        <Align>0</Align>
+        <Font>
+          <Size>9.75</Size>
+          <Bold>-1</Bold>
+        </Font>
+      </Field>
+      <Field>
+        <Name>lPg1ColHd2</Name>
+        <Section>5</Section>
+        <Text>Description</Text>
+        <Left>1620</Left>
+        <Top>4050</Top>
+        <Width>2700</Width>
+        <Height>270</Height>
+        <Align>0</Align>
+        <Font>
+          <Size>9.75</Size>
+          <Bold>-1</Bold>
+        </Font>
+      </Field>
+      <Field>
+        <Name>lPg1ColHd3</Name>
+        <Section>5</Section>
+        <Text>UOM</Text>
+        <Left>5665</Left>
+        <Top>4050</Top>
+        <Width>555</Width>
+        <Height>270</Height>
+        <Align>2</Align>
+        <Font>
+          <Size>9.75</Size>
+          <Bold>-1</Bold>
+        </Font>
+      </Field>
+      <Field>
+        <Name>lPg1ColHd4</Name>
+        <Section>5</Section>
+        <Text>Item No</Text>
+        <Left>6397</Left>
+        <Top>4050</Top>
+        <Width>1095</Width>
+        <Height>270</Height>
+        <Align>1</Align>
+        <Font>
+          <Size>9.75</Size>
+          <Bold>-1</Bold>
+        </Font>
+      </Field>
+      <Field>
+        <Name>lPg1ColHd8</Name>
+        <Section>5</Section>
+        <Text>Prev. $</Text>
+        <Left>7560</Left>
+        <Top>4050</Top>
+        <Width>1005</Width>
+        <Height>270</Height>
+        <Align>2</Align>
+        <Font>
+          <Size>9.75</Size>
+          <Bold>-1</Bold>
+        </Font>
+      </Field>
+      <Field>
+        <Name>lPg1ColHd7</Name>
+        <Section>5</Section>
+        <Text>% Mult</Text>
+        <Left>8550</Left>
+        <Top>4050</Top>
+        <Width>720</Width>
+        <Height>270</Height>
+        <Align>2</Align>
+        <WordWrap>0</WordWrap>
+        <Font>
+          <Size>9.75</Size>
+          <Bold>-1</Bold>
+        </Font>
+      </Field>
+      <Field>
+        <Name>lPg1ColHd5</Name>
+        <Section>5</Section>
+        <Text>New $</Text>
+        <Left>9360</Left>
+        <Top>4050</Top>
+        <Width>630</Width>
+        <Height>270</Height>
+        <Align>2</Align>
+        <WordWrap>0</WordWrap>
+        <Font>
+          <Size>9.75</Size>
+          <Bold>-1</Bold>
+        </Font>
+      </Field>
+      <Field>
+        <Name>lPg1ColHd6</Name>
+        <Section>5</Section>
+        <Text>% Mult</Text>
+        <Left>9990</Left>
+        <Top>4050</Top>
+        <Width>720</Width>
+        <Height>270</Height>
+        <Align>2</Align>
+        <WordWrap>0</WordWrap>
+        <Font>
+          <Size>9.75</Size>
+          <Bold>-1</Bold>
+        </Font>
+      </Field>
+      <Field>
+        <Name>lFax</Name>
+        <Section>5</Section>
+        <Text>Fax:</Text>
+        <Left>120</Left>
+        <Top>1530</Top>
+        <Width>465</Width>
+        <Height>270</Height>
+        <Font>
+          <Size>9.75</Size>
+        </Font>
+      </Field>
+      <Field>
+        <Name>txtAttention_name1</Name>
+        <Section>3</Section>
+        <Text>user_phone</Text>
+        <Calculated>-1</Calculated>
+        <Left>4770</Left>
+        <Top>1260</Top>
+        <Width>1905</Width>
+        <Height>270</Height>
+        <Align>0</Align>
+        <Font>
+          <Bold>-1</Bold>
+        </Font>
+      </Field>
+      <Field>
+        <Name>txtEmail</Name>
+        <Section>3</Section>
+        <Text>"Email: " + email</Text>
+        <Calculated>-1</Calculated>
+        <Top>1700</Top>
+        <Width>5995</Width>
+        <Height>285</Height>
+        <Font>
+          <Size>9.75</Size>
+          <Bold>-1</Bold>
+        </Font>
+      </Field>
+      <Field>
+        <Name>Label</Name>
+        <Section>5</Section>
+        <Text>Phone:</Text>
+        <Left>120</Left>
+        <Top>1800</Top>
+        <Width>735</Width>
+        <Height>270</Height>
+        <Font>
+          <Size>9.75</Size>
+        </Font>
+      </Field>
+      <Field>
+        <Name>txtFax1</Name>
+        <Section>5</Section>
+        <Text>phone1</Text>
+        <Calculated>-1</Calculated>
+        <Left>810</Left>
+        <Top>1800</Top>
+        <Width>1890</Width>
+        <Height>270</Height>
+        <Font>
+          <Size>9.75</Size>
+        </Font>
+      </Field>
+      <Field>
+        <Name>txtFax2</Name>
+        <Section>5</Section>
+        <Text>action_header</Text>
+        <Calculated>-1</Calculated>
+        <Left>90</Left>
+        <Top>3600</Top>
+        <Width>10545</Width>
+        <Height>15</Height>
+        <Align>1</Align>
+        <CanGrow>-1</CanGrow>
+        <Font>
+          <Size>9.75</Size>
+          <Bold>-1</Bold>
+          <Underline>-1</Underline>
+        </Font>
+      </Field>
+      <Field>
+        <Name>lPg4</Name>
+        <Section>3</Section>
+        <Text>Phone:</Text>
+        <Left>4140</Left>
+        <Top>1260</Top>
+        <Width>645</Width>
+        <Height>270</Height>
+        <Align>0</Align>
+        <Font>
+          <Bold>-1</Bold>
+        </Font>
+      </Field>
+    </Fields>
+  </Report>
+</Reports>

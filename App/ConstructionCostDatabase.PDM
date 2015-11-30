@@ -1,0 +1,400 @@
+[Root]
+Most Recent Package=CCDWin7
+
+
+[Package|CCD|Root]
+SubWizProgID=PDWizard.SetupPkgSubWiz
+BuildFolder=e:\CCD 7.0.4
+
+[Package|CCD|Configure DAO ISAMs]
+Applicable=No
+
+[Package|CCD|Configure DAO ODBC]
+JetWorkspace=
+ODBCDirect=
+
+[Package|CCD|Files Found]
+releasenotes.rtf=C:\TEMP\releasenotes.rtf
+
+[Package|CCD|Files Released]
+User.DLL=
+
+[Package|CCD|Missing Dependency Information]
+C:\CCD\04-Code\3-Bin\MeansCtrl.ocx=
+C:\CCD\04-Code\3-Bin\CCDdal.dll=
+C:\Program Files\APEX\True DBReports 6.0\tdbr6.ocx=
+C:\WINNT\system32\MeansCtrl.ocx=
+C:\WINNT\system32\CCDdal.dll=
+C:\WINNT\system32\tdbr6.ocx=
+C:\WINNT\system32\vsrpt8.ocx=
+C:\WINNT\system32\vsprint8.ocx=
+
+[Package|CCD|Out-of-Date Dependency Information]
+C:\WINNT\system32\tdbgpp.dll=
+C:\WINNT\system32\TABCTL32.OCX=
+C:\WINNT\system32\MSCOMCT2.OCX=
+C:\WINNT\system32\MSADODC.OCX=
+C:\WINNT\system32\RICHTX32.OCX=
+C:\WINNT\system32\MSCOMCTL.OCX=
+C:\WINNT\system32\COMDLG32.OCX=
+C:\WINNT\system32\MSSTDFMT.DLL=
+
+[Package|CCD|Files Added]
+releasenotes.rtf=
+c:\ccd\04-code\1-vb\app\rpt_cost_detail_summary.xml=
+c:\ccd\04-code\1-vb\app\rpt_variance.xml=
+c:\ccd\04-code\1-vb\app\rpt_variance_metric.xml=
+c:\ccd\04-code\1-vb\app\rpt_cost_detail_summary_metric.xml=
+
+[Package|CCD|Files Removed]
+
+[Package|CCD|Files In Project]
+C:\WINNT\system32\MSVBVM60.DLL=Yes
+C:\Program Files\Microsoft Visual Studio\VB98\Wizards\PDWizard\Redist\COMCAT.DLL=Yes
+C:\WINNT\system32\MSSTDFMT.DLL=Yes
+C:\WINNT\system32\COMDLG32.OCX=Yes
+C:\WINNT\system32\MSCOMCTL.OCX=Yes
+C:\WINNT\system32\RICHTX32.OCX=Yes
+C:\Program Files\Microsoft Visual Studio\VB98\Wizards\PDWizard\Redist\RICHED32.DLL=Yes
+C:\WINNT\system32\MSADODC.OCX=Yes
+C:\WINNT\system32\MSCOMCT2.OCX=Yes
+C:\WINNT\system32\TABCTL32.OCX=Yes
+C:\Program Files\Microsoft Visual Studio\VB98\Wizards\PDWizard\Redist\MDAC_TYP.EXE=Yes
+C:\Program Files\Microsoft Visual Studio\VB98\Wizards\PDWizard\SETUP.EXE=Yes
+C:\Program Files\Microsoft Visual Studio\VB98\Wizards\PDWizard\SETUP1.EXE=Yes
+C:\WINNT\system32\VB6STKIT.DLL=Yes
+C:\Program Files\Microsoft Visual Studio\VB98\Wizards\PDWizard\ST6UNST.EXE=Yes
+C:\CCD\04-Code\1-VB\App\ConstructionCostDatabase.exe=Yes
+C:\WINNT\system32\OLEAUT32.DLL=Yes
+C:\WINNT\system32\OLEPRO32.DLL=Yes
+C:\WINNT\system32\ASYCFILT.DLL=Yes
+C:\WINNT\system32\STDOLE2.TLB=Yes
+C:\WINNT\system32\todg7.ocx=Yes
+C:\WINNT\system32\todgub7.dll=Yes
+C:\WINNT\system32\tdbgpp7.dll=Yes
+C:\TEMP\releasenotes.rtf=Yes
+C:\WINNT\system32\tdbr6.ocx=Yes
+C:\WINNT\system32\CCDdal.dll=Yes
+C:\WINNT\system32\MeansCtrl.ocx=Yes
+C:\WINNT\system32\vsprint8.ocx=Yes
+C:\WINNT\system32\vsrpt8.ocx=Yes
+C:\CCD\04-Code\1-VB\App\rpt_cost_detail_summary.xml=Yes
+C:\CCD\04-Code\1-VB\App\rpt_variance.xml=Yes
+C:\CCD\04-Code\1-VB\App\rpt_variance_metric.xml=Yes
+C:\CCD\04-Code\1-VB\App\rpt_cost_detail_summary_metric.xml=Yes
+
+[Package|CCD|Configure Registry Files]
+Applicable=No
+
+[Package|CCD|Configure Remote Servers]
+Applicable=No
+
+[Package|CCD|Install Locations]
+C:\ccd\1-VB\App\ConstructionCostDatabase.exe=$(AppPath)
+C:\WINNT\system32\MSVBVM60.DLL=$(WinSysPathSysFile)
+C:\Program Files\Microsoft Visual Studio\VB98\Wizards\PDWizard\Redist\OLEAUT32.DLL=$(WinSysPathSysFile)
+C:\Program Files\Microsoft Visual Studio\VB98\Wizards\PDWizard\Redist\OLEPRO32.DLL=$(WinSysPathSysFile)
+C:\Program Files\Microsoft Visual Studio\VB98\Wizards\PDWizard\Redist\ASYCFILT.DLL=$(WinSysPathSysFile)
+C:\Program Files\Microsoft Visual Studio\VB98\Wizards\PDWizard\Redist\STDOLE2.TLB=$(WinSysPathSysFile)
+C:\Program Files\Microsoft Visual Studio\VB98\Wizards\PDWizard\Redist\COMCAT.DLL=$(WinSysPathSysFile)
+C:\Program Files\APEX\True DBReports 6.0\tdbr6.ocx=$(WinSysPath)
+C:\WINNT\system32\MSSTDFMT.DLL=$(WinSysPath)
+C:\ccd\3-Bin\CCDdal.dll=$(WinSysPath)
+C:\WINNT\system32\COMDLG32.OCX=$(WinSysPath)
+C:\WINNT\system32\MSCOMCTL.OCX=$(WinSysPath)
+C:\WINNT\system32\RICHTX32.OCX=$(WinSysPath)
+C:\Program Files\Microsoft Visual Studio\VB98\Wizards\PDWizard\Redist\RICHED32.DLL=$(WinSysPathSysFile)
+C:\WINNT\system32\todg6.ocx=$(WinSysPath)
+C:\WINNT\system32\todgub6.dll=$(WinSysPathSysFile)
+C:\WINNT\system32\tdbgpp.dll=$(WinSysPathSysFile)
+C:\WINNT\system32\MSADODC.OCX=$(WinSysPath)
+C:\WINNT\system32\MSCOMCT2.OCX=$(WinSysPath)
+C:\WINNT\system32\TABCTL32.OCX=$(WinSysPath)
+C:\ccd\3-Bin\MeansCtrl.ocx=$(WinSysPath)
+C:\Program Files\Microsoft Visual Studio\VB98\Wizards\PDWizard\Redist\MDAC_TYP.EXE=$(AppPath)
+C:\Program Files\Microsoft Visual Studio\VB98\Wizards\PDWizard\SETUP.EXE=$(AppPath)
+C:\Program Files\Microsoft Visual Studio\VB98\Wizards\PDWizard\SETUP1.EXE=$(WinPath)
+C:\WINNT\system32\VB6STKIT.DLL=$(WinSysPathSysFile)
+C:\Program Files\Microsoft Visual Studio\VB98\Wizards\PDWizard\ST6UNST.EXE=$(WinPath)
+C:\ccd\1-VB\App\ReleaseNotes.rtf=$(AppPath)
+C:\CCD\04-Code\1-VB\App\ConstructionCostDatabase.exe=$(AppPath)
+C:\WINNT\system32\OLEAUT32.DLL=$(WinSysPathSysFile)
+C:\WINNT\system32\OLEPRO32.DLL=$(WinSysPathSysFile)
+C:\WINNT\system32\ASYCFILT.DLL=$(WinSysPathSysFile)
+C:\WINNT\system32\STDOLE2.TLB=$(WinSysPathSysFile)
+C:\CCD\04-Code\3-Bin\CCDdal.dll=$(WinSysPath)
+C:\WINNT\system32\todg7.ocx=$(WinSysPath)
+C:\WINNT\system32\todgub7.dll=$(WinSysPath)
+C:\WINNT\system32\tdbgpp7.dll=$(WinSysPath)
+C:\CCD\04-Code\3-Bin\MeansCtrl.ocx=$(WinSysPath)
+C:\TEMP\releasenotes.rtf=$(AppPath)
+C:\WINNT\system32\tdbr6.ocx=$(WinSysPath)
+C:\WINNT\system32\CCDdal.dll=$(WinSysPath)
+C:\WINNT\system32\MeansCtrl.ocx=$(WinSysPath)
+C:\WINNT\system32\vsprint8.ocx=$(WinSysPath)
+C:\WINNT\system32\vsrpt8.ocx=$(WinSysPath)
+C:\CCD\04-Code\1-VB\App\rpt_cost_detail_summary.xml=$(AppPath)
+C:\CCD\04-Code\1-VB\App\rpt_variance.xml=$(AppPath)
+C:\CCD\04-Code\1-VB\App\rpt_variance_metric.xml=$(AppPath)
+C:\CCD\04-Code\1-VB\App\rpt_cost_detail_summary_metric.xml=$(AppPath)
+
+[Package|CCD|Configure Shared Files]
+Applicable=Yes
+C:\ccd\1-VB\App\ConstructionCostDatabase.exe=No
+C:\Program Files\Microsoft Visual Studio\VB98\Wizards\PDWizard\Redist\MDAC_TYP.EXE=No
+C:\ccd\1-VB\App\ReleaseNotes.rtf=No
+C:\CCD\04-Code\1-VB\App\ConstructionCostDatabase.exe=No
+C:\TEMP\releasenotes.rtf=No
+C:\CCD\04-Code\1-VB\App\rpt_cost_detail_summary.xml=No
+C:\CCD\04-Code\1-VB\App\rpt_variance.xml=No
+C:\CCD\04-Code\1-VB\App\rpt_variance_metric.xml=No
+C:\CCD\04-Code\1-VB\App\rpt_cost_detail_summary_metric.xml=No
+
+[Package|CCD|Distribution]
+Type=single
+Size=
+Title=Construction Cost Database 7.0
+
+[Package|CCD|IconGroups]
+Group0=Construction Cost Database
+PrivateGroup0=False
+Parent0=$(Programs)
+
+[Package|CCD|Construction Cost Database]
+Icon1=ConstructionCostDatabase.exe
+Title1=Construction Cost Database
+StartIn1=$(AppPath)
+Key1=Icon1
+
+[Package|CCD|Package]
+PackageFolder=e:\CCD 7.0.4
+ProjectFolder=C:\CCD\04-Code\1-VB\App
+ServerSideCab=
+File1=e:\CCD 7.0.4\setup.exe
+File2=e:\CCD 7.0.4\Setup.Lst
+File3=e:\CCD 7.0.4\ConstructionCostDatabase.CAB
+Handler1=PDWizard.FolderDplySubWiz
+Handler2=PDWizard.WebPostDplySubWiz
+
+
+[Package|CCDWin7|Root]
+SubWizProgID=PDWizard.SetupPkgSubWiz
+BuildFolder=C:\SourceCode\CCD\04-Code-Code-CCD86-02\1-VB\App\Win7SetUp
+
+[Package|CCDWin7|Configure DAO ISAMs]
+Applicable=No
+
+[Package|CCDWin7|Configure DAO ODBC]
+JetWorkspace=
+ODBCDirect=
+
+[Package|CCDWin7|Files Found]
+releasenotes.rtf=C:\TEMP\releasenotes.rtf
+Redemption.dll=C:\SourceCode\CCD\04-Code-Code-CCD86-02\1-VB\App\Redemption.dll
+
+[Package|CCDWin7|Files Released]
+User.DLL=
+
+[Package|CCDWin7|Missing Dependency Information]
+C:\CCD\04-Code\3-Bin\MeansCtrl.ocx=
+C:\CCD\04-Code\3-Bin\CCDdal.dll=
+C:\Program Files\APEX\True DBReports 6.0\tdbr6.ocx=
+C:\WINNT\system32\MeansCtrl.ocx=
+C:\WINNT\system32\CCDdal.dll=
+C:\WINNT\system32\tdbr6.ocx=
+C:\WINNT\system32\vsrpt8.ocx=
+C:\WINNT\system32\vsprint8.ocx=
+C:\SourceCode\CCD\04-Code-Code-CCD86-02\1-VB\App\Redemption.dll=
+C:\Windows\SysWOW64\activeds.tlb=
+C:\Program Files (x86)\Microsoft Office\Office12\MSOUTL.OLB=
+C:\Windows\SysWOW64\CCDdal.dll=
+C:\Windows\SysWOW64\vsrpt8.ocx=
+C:\Windows\SysWOW64\vsprint8.ocx=
+C:\Windows\winsxs\x86_microsoft.windows.common-controls_6595b64144ccf1df_5.82.7601.17514_none_ec83dffa859149af\comctl32.dll=
+
+[Package|CCDWin7|Out-of-Date Dependency Information]
+C:\WINNT\system32\tdbgpp.dll=
+C:\WINNT\system32\TABCTL32.OCX=
+C:\WINNT\system32\MSCOMCT2.OCX=
+C:\WINNT\system32\MSADODC.OCX=
+C:\WINNT\system32\RICHTX32.OCX=
+C:\WINNT\system32\MSCOMCTL.OCX=
+C:\WINNT\system32\COMDLG32.OCX=
+C:\WINNT\system32\MSSTDFMT.DLL=
+C:\Windows\SysWOW64\scrrun.dll=
+C:\Windows\SysWOW64\msstdfmt.dll=
+
+[Package|CCDWin7|Files Added]
+c:\sourcecode\ccd\04-code-code-ccd86-02\1-vb\app\releasenotes.rtf=
+rpt_cost_detail_summary.xml=
+rpt_variance.xml=
+rpt_variance_metric.xml=
+rpt_cost_detail_summary_metric.xml=
+
+[Package|CCDWin7|Files Removed]
+
+[Package|CCDWin7|Files In Project]
+C:\SourceCode\CCD\04-Code-Code-CCD86-02\1-VB\App\ConstructionCostDatabase.exe=Yes
+C:\Windows\System32\msvbvm60.dll=Yes
+C:\Program Files (x86)\Microsoft Visual Studio\VB98\Wizards\PDWizard\Redist\OLEAUT32.DLL=Yes
+C:\Program Files (x86)\Microsoft Visual Studio\VB98\Wizards\PDWizard\Redist\OLEPRO32.DLL=Yes
+C:\Program Files (x86)\Microsoft Visual Studio\VB98\Wizards\PDWizard\Redist\ASYCFILT.DLL=Yes
+C:\Program Files (x86)\Microsoft Visual Studio\VB98\Wizards\PDWizard\Redist\STDOLE2.TLB=Yes
+C:\Program Files (x86)\Microsoft Visual Studio\VB98\Wizards\PDWizard\Redist\COMCAT.DLL=Yes
+C:\Windows\winsxs\x86_microsoft.windows.common-controls_6595b64144ccf1df_5.82.7601.17514_none_ec83dffa859149af\comctl32.dll=Yes
+C:\Windows\SysWOW64\msstdfmt.dll=Yes
+C:\Windows\SysWOW64\vsprint8.ocx=Yes
+C:\Windows\SysWOW64\vsrpt8.ocx=Yes
+C:\Windows\SysWOW64\CCDdal.dll=Yes
+C:\SourceCode\CCD\04-Code-Code-CCD86-02\1-VB\App\Redemption.dll=Yes
+C:\Program Files (x86)\Microsoft Office\Office12\MSOUTL.OLB=Yes
+C:\Windows\SysWOW64\activeds.tlb=Yes
+C:\Windows\SysWOW64\scrrun.dll=Yes
+C:\Program Files (x86)\Microsoft Visual Studio\VB98\Wizards\PDWizard\Redist\MSVCRT.DLL=Yes
+C:\Windows\SysWOW64\COMDLG32.OCX=Yes
+C:\Windows\SysWOW64\MSCOMCTL.OCX=Yes
+C:\Windows\SysWOW64\RICHTX32.OCX=Yes
+C:\Program Files (x86)\Microsoft Visual Studio\VB98\Wizards\PDWizard\Redist\RICHED32.DLL=Yes
+C:\Windows\SysWOW64\todg8.ocx=Yes
+C:\Windows\SysWOW64\todgub8.dll=Yes
+C:\Windows\SysWOW64\tdbgpp8.dll=Yes
+C:\Windows\SysWOW64\MSADODC.OCX=Yes
+C:\Windows\SysWOW64\MSCOMCT2.OCX=Yes
+C:\Windows\SysWOW64\TABCTL32.OCX=Yes
+C:\Program Files (x86)\Microsoft Visual Studio\VB98\Wizards\PDWizard\Redist\MDAC_TYP.EXE=Yes
+C:\Program Files (x86)\Microsoft Visual Studio\VB98\Wizards\PDWizard\SETUP.EXE=Yes
+C:\Program Files (x86)\Microsoft Visual Studio\VB98\Wizards\PDWizard\SETUP1.EXE=Yes
+C:\Windows\System32\VB6STKIT.DLL=Yes
+C:\Program Files (x86)\Microsoft Visual Studio\VB98\Wizards\PDWizard\ST6UNST.EXE=Yes
+C:\SourceCode\CCD\04-Code-Code-CCD86-02\1-VB\App\ReleaseNotes.rtf=Yes
+C:\SourceCode\CCD\04-Code-Code-CCD86-02\1-VB\App\rpt_cost_detail_summary.xml=Yes
+C:\SourceCode\CCD\04-Code-Code-CCD86-02\1-VB\App\rpt_variance.xml=Yes
+C:\SourceCode\CCD\04-Code-Code-CCD86-02\1-VB\App\rpt_variance_metric.xml=Yes
+C:\SourceCode\CCD\04-Code-Code-CCD86-02\1-VB\App\rpt_cost_detail_summary_metric.xml=Yes
+
+[Package|CCDWin7|Configure Registry Files]
+Applicable=No
+
+[Package|CCDWin7|Configure Remote Servers]
+Applicable=No
+
+[Package|CCDWin7|Install Locations]
+C:\ccd\1-VB\App\ConstructionCostDatabase.exe=$(AppPath)
+C:\WINNT\system32\MSVBVM60.DLL=$(WinSysPathSysFile)
+C:\Program Files\Microsoft Visual Studio\VB98\Wizards\PDWizard\Redist\OLEAUT32.DLL=$(WinSysPathSysFile)
+C:\Program Files\Microsoft Visual Studio\VB98\Wizards\PDWizard\Redist\OLEPRO32.DLL=$(WinSysPathSysFile)
+C:\Program Files\Microsoft Visual Studio\VB98\Wizards\PDWizard\Redist\ASYCFILT.DLL=$(WinSysPathSysFile)
+C:\Program Files\Microsoft Visual Studio\VB98\Wizards\PDWizard\Redist\STDOLE2.TLB=$(WinSysPathSysFile)
+C:\Program Files\Microsoft Visual Studio\VB98\Wizards\PDWizard\Redist\COMCAT.DLL=$(WinSysPathSysFile)
+C:\Program Files\APEX\True DBReports 6.0\tdbr6.ocx=$(WinSysPath)
+C:\WINNT\system32\MSSTDFMT.DLL=$(WinSysPath)
+C:\ccd\3-Bin\CCDdal.dll=$(WinSysPath)
+C:\WINNT\system32\COMDLG32.OCX=$(WinSysPath)
+C:\WINNT\system32\MSCOMCTL.OCX=$(WinSysPath)
+C:\WINNT\system32\RICHTX32.OCX=$(WinSysPath)
+C:\Program Files\Microsoft Visual Studio\VB98\Wizards\PDWizard\Redist\RICHED32.DLL=$(WinSysPathSysFile)
+C:\WINNT\system32\todg6.ocx=$(WinSysPath)
+C:\WINNT\system32\todgub6.dll=$(WinSysPathSysFile)
+C:\WINNT\system32\tdbgpp.dll=$(WinSysPathSysFile)
+C:\WINNT\system32\MSADODC.OCX=$(WinSysPath)
+C:\WINNT\system32\MSCOMCT2.OCX=$(WinSysPath)
+C:\WINNT\system32\TABCTL32.OCX=$(WinSysPath)
+C:\ccd\3-Bin\MeansCtrl.ocx=$(WinSysPath)
+C:\Program Files\Microsoft Visual Studio\VB98\Wizards\PDWizard\Redist\MDAC_TYP.EXE=$(AppPath)
+C:\Program Files\Microsoft Visual Studio\VB98\Wizards\PDWizard\SETUP.EXE=$(AppPath)
+C:\Program Files\Microsoft Visual Studio\VB98\Wizards\PDWizard\SETUP1.EXE=$(WinPath)
+C:\WINNT\system32\VB6STKIT.DLL=$(WinSysPathSysFile)
+C:\Program Files\Microsoft Visual Studio\VB98\Wizards\PDWizard\ST6UNST.EXE=$(WinPath)
+C:\ccd\1-VB\App\ReleaseNotes.rtf=$(AppPath)
+C:\CCD\04-Code\1-VB\App\ConstructionCostDatabase.exe=$(AppPath)
+C:\WINNT\system32\OLEAUT32.DLL=$(WinSysPathSysFile)
+C:\WINNT\system32\OLEPRO32.DLL=$(WinSysPathSysFile)
+C:\WINNT\system32\ASYCFILT.DLL=$(WinSysPathSysFile)
+C:\WINNT\system32\STDOLE2.TLB=$(WinSysPathSysFile)
+C:\CCD\04-Code\3-Bin\CCDdal.dll=$(WinSysPath)
+C:\WINNT\system32\todg7.ocx=$(WinSysPath)
+C:\WINNT\system32\todgub7.dll=$(WinSysPath)
+C:\WINNT\system32\tdbgpp7.dll=$(WinSysPath)
+C:\CCD\04-Code\3-Bin\MeansCtrl.ocx=$(WinSysPath)
+C:\TEMP\releasenotes.rtf=$(AppPath)
+C:\WINNT\system32\tdbr6.ocx=$(WinSysPath)
+C:\WINNT\system32\CCDdal.dll=$(WinSysPath)
+C:\WINNT\system32\MeansCtrl.ocx=$(WinSysPath)
+C:\WINNT\system32\vsprint8.ocx=$(WinSysPath)
+C:\WINNT\system32\vsrpt8.ocx=$(WinSysPath)
+C:\CCD\04-Code\1-VB\App\rpt_cost_detail_summary.xml=$(AppPath)
+C:\CCD\04-Code\1-VB\App\rpt_variance.xml=$(AppPath)
+C:\CCD\04-Code\1-VB\App\rpt_variance_metric.xml=$(AppPath)
+C:\CCD\04-Code\1-VB\App\rpt_cost_detail_summary_metric.xml=$(AppPath)
+C:\SourceCode\CCD\04-Code-Code-CCD86-02\1-VB\App\ConstructionCostDatabase.exe=$(AppPath)
+C:\Windows\System32\msvbvm60.dll=$(WinSysPathSysFile)
+C:\Program Files (x86)\Microsoft Visual Studio\VB98\Wizards\PDWizard\Redist\OLEAUT32.DLL=$(WinSysPathSysFile)
+C:\Program Files (x86)\Microsoft Visual Studio\VB98\Wizards\PDWizard\Redist\OLEPRO32.DLL=$(WinSysPathSysFile)
+C:\Program Files (x86)\Microsoft Visual Studio\VB98\Wizards\PDWizard\Redist\ASYCFILT.DLL=$(WinSysPathSysFile)
+C:\Program Files (x86)\Microsoft Visual Studio\VB98\Wizards\PDWizard\Redist\STDOLE2.TLB=$(WinSysPathSysFile)
+C:\Program Files (x86)\Microsoft Visual Studio\VB98\Wizards\PDWizard\Redist\COMCAT.DLL=$(WinSysPathSysFile)
+C:\Windows\winsxs\x86_microsoft.windows.common-controls_6595b64144ccf1df_5.82.7601.17514_none_ec83dffa859149af\comctl32.dll=$(WinSysPath)
+C:\Windows\SysWOW64\msstdfmt.dll=$(WinSysPath)
+C:\Windows\SysWOW64\vsprint8.ocx=$(WinSysPath)
+C:\Windows\SysWOW64\vsrpt8.ocx=$(WinSysPath)
+C:\Windows\SysWOW64\CCDdal.dll=$(WinSysPath)
+C:\SourceCode\CCD\04-Code-Code-CCD86-02\1-VB\App\Redemption.dll=$(AppPath)
+C:\Program Files (x86)\Microsoft Office\Office12\MSOUTL.OLB=$(WinSysPath)
+C:\Windows\SysWOW64\activeds.tlb=$(WinSysPath)
+C:\Windows\SysWOW64\scrrun.dll=$(WinSysPath)
+C:\Program Files (x86)\Microsoft Visual Studio\VB98\Wizards\PDWizard\Redist\MSVCRT.DLL=$(WinSysPathSysFile)
+C:\Windows\SysWOW64\COMDLG32.OCX=$(WinSysPath)
+C:\Windows\SysWOW64\MSCOMCTL.OCX=$(WinSysPath)
+C:\Windows\SysWOW64\RICHTX32.OCX=$(WinSysPath)
+C:\Program Files (x86)\Microsoft Visual Studio\VB98\Wizards\PDWizard\Redist\RICHED32.DLL=$(WinSysPathSysFile)
+C:\Windows\SysWOW64\todg8.ocx=$(WinSysPath)
+C:\Windows\SysWOW64\todgub8.dll=$(WinSysPath)
+C:\Windows\SysWOW64\tdbgpp8.dll=$(WinSysPath)
+C:\Windows\SysWOW64\MSADODC.OCX=$(WinSysPath)
+C:\Windows\SysWOW64\MSCOMCT2.OCX=$(WinSysPath)
+C:\Windows\SysWOW64\TABCTL32.OCX=$(WinSysPath)
+C:\Program Files (x86)\Microsoft Visual Studio\VB98\Wizards\PDWizard\Redist\MDAC_TYP.EXE=$(AppPath)
+C:\Program Files (x86)\Microsoft Visual Studio\VB98\Wizards\PDWizard\SETUP.EXE=$(AppPath)
+C:\Program Files (x86)\Microsoft Visual Studio\VB98\Wizards\PDWizard\SETUP1.EXE=$(WinPath)
+C:\Windows\System32\VB6STKIT.DLL=$(WinSysPathSysFile)
+C:\Program Files (x86)\Microsoft Visual Studio\VB98\Wizards\PDWizard\ST6UNST.EXE=$(WinPath)
+C:\SourceCode\CCD\04-Code-Code-CCD86-02\1-VB\App\ReleaseNotes.rtf=$(AppPath)
+C:\SourceCode\CCD\04-Code-Code-CCD86-02\1-VB\App\rpt_cost_detail_summary.xml=$(AppPath)
+C:\SourceCode\CCD\04-Code-Code-CCD86-02\1-VB\App\rpt_variance.xml=$(AppPath)
+C:\SourceCode\CCD\04-Code-Code-CCD86-02\1-VB\App\rpt_variance_metric.xml=$(AppPath)
+C:\SourceCode\CCD\04-Code-Code-CCD86-02\1-VB\App\rpt_cost_detail_summary_metric.xml=$(AppPath)
+
+[Package|CCDWin7|Configure Shared Files]
+Applicable=Yes
+C:\ccd\1-VB\App\ConstructionCostDatabase.exe=No
+C:\Program Files\Microsoft Visual Studio\VB98\Wizards\PDWizard\Redist\MDAC_TYP.EXE=No
+C:\ccd\1-VB\App\ReleaseNotes.rtf=No
+C:\CCD\04-Code\1-VB\App\ConstructionCostDatabase.exe=No
+C:\TEMP\releasenotes.rtf=No
+C:\CCD\04-Code\1-VB\App\rpt_cost_detail_summary.xml=No
+C:\CCD\04-Code\1-VB\App\rpt_variance.xml=No
+C:\CCD\04-Code\1-VB\App\rpt_variance_metric.xml=No
+C:\CCD\04-Code\1-VB\App\rpt_cost_detail_summary_metric.xml=No
+C:\SourceCode\CCD\04-Code-Code-CCD86-02\1-VB\App\ConstructionCostDatabase.exe=No
+C:\SourceCode\CCD\04-Code-Code-CCD86-02\1-VB\App\Redemption.dll=No
+C:\Program Files (x86)\Microsoft Visual Studio\VB98\Wizards\PDWizard\Redist\MDAC_TYP.EXE=No
+C:\SourceCode\CCD\04-Code-Code-CCD86-02\1-VB\App\ReleaseNotes.rtf=No
+C:\SourceCode\CCD\04-Code-Code-CCD86-02\1-VB\App\rpt_cost_detail_summary.xml=No
+C:\SourceCode\CCD\04-Code-Code-CCD86-02\1-VB\App\rpt_variance.xml=No
+C:\SourceCode\CCD\04-Code-Code-CCD86-02\1-VB\App\rpt_variance_metric.xml=No
+C:\SourceCode\CCD\04-Code-Code-CCD86-02\1-VB\App\rpt_cost_detail_summary_metric.xml=No
+
+[Package|CCDWin7|Distribution]
+Type=single
+Size=
+Title=Construction Cost Database 8.7.0
+
+[Package|CCDWin7|Package]
+PackageFolder=C:\SourceCode\CCD\04-Code-Code-CCD86-02\1-VB\App\Win7SetUp
+ProjectFolder=C:\SourceCode\CCD\04-Code-Code-CCD86-02\1-VB\App
+ServerSideCab=
+File1=C:\SourceCode\CCD\04-Code-Code-CCD86-02\1-VB\App\Win7SetUp\setup.exe
+File2=C:\SourceCode\CCD\04-Code-Code-CCD86-02\1-VB\App\Win7SetUp\Setup.Lst
+File3=C:\SourceCode\CCD\04-Code-Code-CCD86-02\1-VB\App\Win7SetUp\ConstructionCostDatabase.CAB
+Handler1=PDWizard.FolderDplySubWiz
+Handler2=PDWizard.WebPostDplySubWiz

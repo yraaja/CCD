@@ -1,0 +1,252 @@
+<?xml version="1.0" encoding="windows-1252" ?>
+<Reports>
+<!--
+///////////////////////////////////////////////////////
+//
+// VSReport Report Definition File
+//
+// This file contains the following reports:
+//
+//   1) Long Description Report
+//
+///////////////////////////////////////////////////////
+-->
+
+  <!-- Report *** Long Description Report *** -->
+  <Report>
+    <Name>Long Description Report</Name>
+    <DataSource>
+      <ConnectionString>Provider=MSDASQL.1;Persist Security Info=False;User ID=DURFEERT;Extended Properties="DATABASE=ccdDev1;SERVER=bincmdgkngeng01;DRIVER={SQL SERVER};DSN=''";Initial Catalog=CCDdev1</ConnectionString>
+      <RecordSource>EXEC usp_select_attribute_value_ext
+	 @min_object_id	= '011105500010'
+	,@max_object_id	= ''
+	,@skey_type	= 'U'
+	,@meas_sys_cd	= 'A'
+	,@obj_desc_filter = ''
+	,@master_format	= '2004'</RecordSource>
+    </DataSource>
+    <Layout>
+      <Width>10820</Width>
+      <MarginLeft>720</MarginLeft>
+      <MarginTop>720</MarginTop>
+      <MarginRight>720</MarginRight>
+      <MarginBottom>720</MarginBottom>
+      <Orientation>1</Orientation>
+    </Layout>
+    <Groups>
+      <Group>
+        <Name>Group 1</Name>
+        <GroupBy>obj_skey</GroupBy>
+      </Group>
+    </Groups>
+    <Sections>
+      <Section>
+        <Name>Detail</Name>
+        <Height>360</Height>
+      </Section>
+      <Section>
+        <Name>Header</Name>
+        <Type>1</Type>
+        <Height>1400</Height>
+      </Section>
+      <Section>
+        <Name>Footer</Name>
+        <Type>2</Type>
+        <Visible>0</Visible>
+      </Section>
+      <Section>
+        <Name>Page Header</Name>
+        <Type>3</Type>
+        <Height>660</Height>
+      </Section>
+      <Section>
+        <Name>Page Footer</Name>
+        <Type>4</Type>
+        <Height>500</Height>
+      </Section>
+      <Section>
+        <Name>Group 0 Header</Name>
+        <Type>5</Type>
+      </Section>
+      <Section>
+        <Name>Group 0 Footer</Name>
+        <Type>6</Type>
+        <Height>255</Height>
+      </Section>
+    </Sections>
+    <Fields>
+      <Field>
+        <Name>TitleLbl</Name>
+        <Section>1</Section>
+        <Text>Construction Cost Database</Text>
+        <Left>1800</Left>
+        <Width>6495</Width>
+        <Height>465</Height>
+        <Align>7</Align>
+        <Font>
+          <Name>Times New Roman</Name>
+          <Size>20.25</Size>
+          <Bold>-1</Bold>
+        </Font>
+      </Field>
+      <Field>
+        <Name>FooterLeft</Name>
+        <Section>4</Section>
+        <Text>Now()</Text>
+        <Calculated>-1</Calculated>
+        <Top>90</Top>
+        <Width>4680</Width>
+        <Height>300</Height>
+        <Align>0</Align>
+        <Font>
+          <Name>Times New Roman</Name>
+        </Font>
+      </Field>
+      <Field>
+        <Name>FooterRight</Name>
+        <Section>4</Section>
+        <Text>"Page " &amp; [Page] &amp; " of " &amp; [Pages]</Text>
+        <Calculated>-1</Calculated>
+        <Left>6120</Left>
+        <Top>90</Top>
+        <Width>4680</Width>
+        <Height>300</Height>
+        <Align>2</Align>
+        <Font>
+          <Name>Times New Roman</Name>
+        </Font>
+      </Field>
+      <Field>
+        <Name>DivLine1</Name>
+        <Section>3</Section>
+        <Top>540</Top>
+        <Width>10815</Width>
+        <Height>15</Height>
+        <BackStyle>1</BackStyle>
+        <BackColor>0</BackColor>
+      </Field>
+      <Field>
+        <Name>obj_idLbl</Name>
+        <Section>3</Section>
+        <Text>Unit Cost ID 95</Text>
+        <Top>85</Top>
+        <Width>1365</Width>
+        <Height>390</Height>
+        <Align>3</Align>
+        <WordWrap>0</WordWrap>
+        <Font>
+          <Bold>-1</Bold>
+        </Font>
+      </Field>
+      <Field>
+        <Name>row_meas_sys_cdLbl</Name>
+        <Section>3</Section>
+        <Text>M</Text>
+        <Left>2975</Left>
+        <Top>85</Top>
+        <Width>255</Width>
+        <Height>390</Height>
+        <Align>4</Align>
+        <WordWrap>0</WordWrap>
+        <Font>
+          <Bold>-1</Bold>
+        </Font>
+      </Field>
+      <Field>
+        <Name>obj_descLbl</Name>
+        <Section>3</Section>
+        <Text>Long Description</Text>
+        <Left>3415</Left>
+        <Top>85</Top>
+        <Width>2505</Width>
+        <Height>390</Height>
+        <Align>3</Align>
+        <WordWrap>0</WordWrap>
+        <Font>
+          <Bold>-1</Bold>
+        </Font>
+      </Field>
+      <Field>
+        <Name>obj_idCtl</Name>
+        <Section>0</Section>
+        <Text>obj_id</Text>
+        <Calculated>-1</Calculated>
+        <Format>@@@@@ @@@ @@@@</Format>
+        <Width>1365</Width>
+        <Height>300</Height>
+        <Align>0</Align>
+      </Field>
+      <Field>
+        <Name>row_meas_sys_cdCtl</Name>
+        <Section>0</Section>
+        <Text>row_meas_sys_cd</Text>
+        <Calculated>-1</Calculated>
+        <Left>2975</Left>
+        <Width>255</Width>
+        <Height>300</Height>
+        <Align>1</Align>
+      </Field>
+      <Field>
+        <Name>obj_descCtl</Name>
+        <Section>0</Section>
+        <Text>obj_desc</Text>
+        <Calculated>-1</Calculated>
+        <Left>3415</Left>
+        <Width>7395</Width>
+        <Height>300</Height>
+        <Align>0</Align>
+        <CanGrow>-1</CanGrow>
+      </Field>
+      <Field>
+        <Name>Picture</Name>
+        <Section>1</Section>
+        <Left>8645</Left>
+        <Top>85</Top>
+        <Width>2175</Width>
+        <Height>645</Height>
+        <Picture>Long Description ReportPic1.gif</Picture>
+        <CanShrink>-1</CanShrink>
+      </Field>
+      <Field>
+        <Name>TitleLbl1</Name>
+        <Section>1</Section>
+        <Text>Long Description Report</Text>
+        <Left>1800</Left>
+        <Top>360</Top>
+        <Width>6495</Width>
+        <Height>465</Height>
+        <Align>7</Align>
+        <Font>
+          <Name>Times New Roman</Name>
+          <Size>20.25</Size>
+          <Bold>-1</Bold>
+        </Font>
+      </Field>
+      <Field>
+        <Name>obj_idCtl1</Name>
+        <Section>0</Section>
+        <Text>ext_id</Text>
+        <Calculated>-1</Calculated>
+        <Format>@@ @@ @@.@@ @@@@</Format>
+        <Left>1440</Left>
+        <Width>1455</Width>
+        <Height>300</Height>
+        <Align>0</Align>
+      </Field>
+      <Field>
+        <Name>obj_idLbl1</Name>
+        <Section>3</Section>
+        <Text>Unit Cost ID 04</Text>
+        <Left>1440</Left>
+        <Top>85</Top>
+        <Width>1455</Width>
+        <Height>390</Height>
+        <Align>3</Align>
+        <WordWrap>0</WordWrap>
+        <Font>
+          <Bold>-1</Bold>
+        </Font>
+      </Field>
+    </Fields>
+  </Report>
+</Reports>

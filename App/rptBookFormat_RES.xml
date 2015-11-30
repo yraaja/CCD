@@ -1,0 +1,3845 @@
+<?xml version="1.0" encoding="windows-1252" ?>
+<Reports>
+<!--
+///////////////////////////////////////////////////////
+//
+// VSReport Report Definition File
+//
+// This file contains the following reports:
+//
+//   1) MF-1995 Metric Book Format
+//   2) MF-1995 Standard Book Format
+//   3) MF-2004 Metric Book Format
+//   4) MF-2004 Standard Book Format
+//
+///////////////////////////////////////////////////////
+-->
+
+  <!-- Report *** MF-1995 Metric Book Format *** -->
+  <Report>
+    <Name>MF-1995 Metric Book Format</Name>
+    <DataSource>
+      <ConnectionString>Provider=SQLNCLI.1;Integrated Security=SSPI;Persist Security Info=False;Initial Catalog=ccddev;Data Source=binnorsqld002\sql2k5</ConnectionString>
+      <RecordSource>exec usp_select_book_format 
+@start_book_unit_cost_id = '047100000000', @end_book_unit_cost_id = '047199999999', @master_format_version = '1995', @book_output_id = 1</RecordSource>
+    </DataSource>
+    <Layout>
+      <Width>11175</Width>
+      <MarginLeft>720</MarginLeft>
+      <MarginTop>720</MarginTop>
+      <MarginRight>720</MarginRight>
+      <MarginBottom>720</MarginBottom>
+      <Orientation>1</Orientation>
+    </Layout>
+    <OnOpen>function formatdescription(book_desc,indent_code,format_char)
+  on error resume next
+  s = Trim(book_desc)
+  if nz(format_char) &gt; "0" then
+     s = "\b " &amp; left(s, format_char) &amp; "\b0 " &amp; mid(s, format_char + 1)
+  end if
+  if not isnull(indent_code) then
+    i = clng(indent_code)
+    s = space(i * 4) &amp; s
+  end if
+  formatdescription = "{" &amp; s &amp; "}"
+end function
+
+function reformatnumber(value, percent_flag)
+  on error resume next
+  v = 0
+  v = trim(value)
+  if v = "" or v = "0" then
+    s = ""
+  elseif percent_flag = "Y" then
+    v = cdbl(v) / 100
+    s = formatpercent(v, 1)
+  else
+    v = cdbl(v)
+    f = 2
+    if v &gt;= 100000 then f = 0
+    s = formatnumber(v, f, -1, 0, -1)
+  end if
+  reformatnumber = s
+end function
+
+function nz(value) 
+  on error resume next
+  if isnull(value) then
+    nz = ""
+  else
+    nz = value
+  end if
+end function
+
+function fixunit(value)
+  if instr(value, "2") &gt; 0 then
+     value = replace(value, "2", "²")
+  end if
+  if instr(value, "3") &gt; 0 then
+     value = replace(value, "3", "³")
+  end if  
+  fixunit = value
+end function
+
+function formatcrewqtyid(crew_qty, crew_id, crew_type_code)
+  on error resume next
+
+  crewqty = 0
+  crewid = ""
+  crewtypecode = ""
+
+  if not isnull(crew_qty) then
+    crewqty = trim(crew_qty)
+  end if
+
+  if not isnull(crew_id) then
+    crewid = trim(crew_id)
+  end if
+
+  if not isnull(crew_type_code) then
+    crewtypecode = trim(crew_type_code)
+  end if
+
+  if crewid = "" then
+    s = ""
+  else
+    if crewtypecode = "C" then
+      s = crewid
+    else 
+      if crewtypecode = "L" then
+        s = formatnumber(crewqty, 0, 0, 0, 0) &amp; " " &amp; crewid
+      else
+        s = "n/a"
+      end if
+    end if
+  end if
+
+  formatcrewqtyid = s
+
+end function</OnOpen>
+    <Groups>
+      <Group>
+        <Name>Group 1</Name>
+        <GroupBy>Level1_ID</GroupBy>
+        <Sort>1</Sort>
+      </Group>
+      <Group>
+        <Name>Group 2</Name>
+        <GroupBy>Level2_ID</GroupBy>
+        <Sort>1</Sort>
+      </Group>
+      <Group>
+        <Name>Group 3</Name>
+        <GroupBy>Level3_ID</GroupBy>
+        <Sort>1</Sort>
+      </Group>
+    </Groups>
+    <Sections>
+      <Section>
+        <Name>Detail</Name>
+        <Height>300</Height>
+        <OnPrint>Line100.Visible = (txt_row_count mod 2 = 0)
+sTemp = Left(table_ref, 1)
+txtRefID.Text = sTemp
+txtRefID.Visible = (sTemp = "R")
+txtGraphicRef.Visible = (nz(Graphic_Ref) &gt; " ")</OnPrint>
+      </Section>
+      <Section>
+        <Name>Header</Name>
+        <Type>1</Type>
+      </Section>
+      <Section>
+        <Name>Footer</Name>
+        <Type>2</Type>
+        <Visible>0</Visible>
+      </Section>
+      <Section>
+        <Name>Page Header</Name>
+        <Type>3</Type>
+      </Section>
+      <Section>
+        <Name>Page Footer</Name>
+        <Type>4</Type>
+        <Height>765</Height>
+      </Section>
+      <Section>
+        <Name>Group 0 Header</Name>
+        <Type>5</Type>
+        <Height>1275</Height>
+      </Section>
+      <Section>
+        <Name>Group 0 Footer</Name>
+        <Type>6</Type>
+        <Height>60</Height>
+        <ForcePageBreak>2</ForcePageBreak>
+      </Section>
+      <Section>
+        <Name>Group 1 Header</Name>
+        <Type>7</Type>
+        <Height>915</Height>
+        <Repeat>-1</Repeat>
+        <OnFormat>PageSubHeader.Visible = (Page &gt; 1)</OnFormat>
+      </Section>
+      <Section>
+        <Name>Group 1 Footer</Name>
+        <Type>8</Type>
+        <Height>315</Height>
+      </Section>
+      <Section>
+        <Name>Group 2 Header</Name>
+        <Type>9</Type>
+        <Height>600</Height>
+      </Section>
+      <Section>
+        <Name>Group 2 Footer</Name>
+        <Type>10</Type>
+        <Height>40</Height>
+      </Section>
+    </Sections>
+    <Fields>
+      <Field>
+        <Name>Line1</Name>
+        <Section>0</Section>
+        <Left>4860</Left>
+        <Height>300</Height>
+        <BorderStyle>1</BorderStyle>
+        <LineWidth>50</LineWidth>
+        <LineSlant>1</LineSlant>
+        <ZOrder>-4</ZOrder>
+      </Field>
+      <Field>
+        <Name>Line2</Name>
+        <Section>0</Section>
+        <Left>360</Left>
+        <Height>300</Height>
+        <BorderStyle>1</BorderStyle>
+        <LineWidth>50</LineWidth>
+        <LineSlant>1</LineSlant>
+        <ZOrder>-3</ZOrder>
+      </Field>
+      <Field>
+        <Name>unit_cost_idCtl1</Name>
+        <Section>0</Section>
+        <Text>=Mid(unit_cost_id,6,3)</Text>
+        <Calculated>-1</Calculated>
+        <Width>375</Width>
+        <Height>300</Height>
+        <Align>1</Align>
+        <HideDuplicates>-1</HideDuplicates>
+        <Font>
+          <Name>Arial Narrow</Name>
+          <Size>8.25</Size>
+          <Bold>-1</Bold>
+        </Font>
+      </Field>
+      <Field>
+        <Name>unit_cost_idCtl</Name>
+        <Section>0</Section>
+        <Text>=Right(unit_cost_id,4)</Text>
+        <Calculated>-1</Calculated>
+        <Left>360</Left>
+        <Width>465</Width>
+        <Height>300</Height>
+        <Align>1</Align>
+        <Font>
+          <Name>Arial Narrow</Name>
+          <Size>8.25</Size>
+        </Font>
+      </Field>
+      <Field>
+        <Name>Line14</Name>
+        <Section>0</Section>
+        <Left>810</Left>
+        <Height>300</Height>
+        <BorderStyle>1</BorderStyle>
+        <LineSlant>2</LineSlant>
+      </Field>
+      <Field>
+        <Name>book_descCtl</Name>
+        <Section>0</Section>
+        <Text>=formatdescription(metric_book_desc,indent_code,format_characters)</Text>
+        <Calculated>-1</Calculated>
+        <RTF>-1</RTF>
+        <Left>814</Left>
+        <Width>4065</Width>
+        <Height>300</Height>
+        <Align>0</Align>
+        <MarginTop>40</MarginTop>
+        <Font>
+          <Name>Arial Narrow</Name>
+          <Size>8.25</Size>
+        </Font>
+      </Field>
+      <Field>
+        <Name>crew_idCtl</Name>
+        <Section>0</Section>
+        <Text>=formatcrewqtyid(crew_qty, crew_id, crew_type_code)</Text>
+        <Calculated>-1</Calculated>
+        <Left>4867</Left>
+        <Width>465</Width>
+        <Height>300</Height>
+        <Align>1</Align>
+        <Font>
+          <Name>Arial Narrow</Name>
+          <Size>6</Size>
+        </Font>
+      </Field>
+      <Field>
+        <Name>Line8</Name>
+        <Section>0</Section>
+        <Left>5310</Left>
+        <Height>300</Height>
+        <BorderStyle>1</BorderStyle>
+        <LineSlant>2</LineSlant>
+      </Field>
+      <Field>
+        <Name>daily_outputCtl</Name>
+        <Section>0</Section>
+        <Text>metric_daily_output</Text>
+        <Calculated>-1</Calculated>
+        <Format>#.##</Format>
+        <Left>5317</Left>
+        <Width>540</Width>
+        <Height>300</Height>
+        <Align>1</Align>
+        <Font>
+          <Name>Arial Narrow</Name>
+          <Size>8.25</Size>
+        </Font>
+      </Field>
+      <Field>
+        <Name>Line9</Name>
+        <Section>0</Section>
+        <Left>5857</Left>
+        <Height>300</Height>
+        <BorderStyle>1</BorderStyle>
+        <LineSlant>2</LineSlant>
+      </Field>
+      <Field>
+        <Name>std_labor_hourCtl</Name>
+        <Section>0</Section>
+        <Text>metric_labor_hour</Text>
+        <Calculated>-1</Calculated>
+        <Format>#,##0.000</Format>
+        <Left>5857</Left>
+        <Width>555</Width>
+        <Height>300</Height>
+        <Align>1</Align>
+        <Font>
+          <Name>Arial Narrow</Name>
+          <Size>8.25</Size>
+        </Font>
+      </Field>
+      <Field>
+        <Name>unitCtl</Name>
+        <Section>0</Section>
+        <Text>=FixUnit(Trim(metric_unit))</Text>
+        <Calculated>-1</Calculated>
+        <Left>6391</Left>
+        <Width>555</Width>
+        <Height>300</Height>
+        <Align>1</Align>
+        <Font>
+          <Name>Arial Narrow</Name>
+          <Size>8.25</Size>
+        </Font>
+      </Field>
+      <Field>
+        <Name>Line10</Name>
+        <Section>0</Section>
+        <Left>6930</Left>
+        <Height>300</Height>
+        <BorderStyle>1</BorderStyle>
+        <LineSlant>2</LineSlant>
+      </Field>
+      <Field>
+        <Name>txt_mat_cost</Name>
+        <Section>0</Section>
+        <Text>=reformatnumber(std_mat_cost,percent_flag)</Text>
+        <Calculated>-1</Calculated>
+        <Left>6930</Left>
+        <Width>735</Width>
+        <Height>300</Height>
+        <Align>2</Align>
+        <MarginRight>30</MarginRight>
+        <Font>
+          <Name>Arial Narrow</Name>
+          <Size>8.25</Size>
+        </Font>
+      </Field>
+      <Field>
+        <Name>Line11</Name>
+        <Section>0</Section>
+        <Left>7650</Left>
+        <Height>300</Height>
+        <BorderStyle>1</BorderStyle>
+        <LineSlant>2</LineSlant>
+      </Field>
+      <Field>
+        <Name>txt_labor_cost</Name>
+        <Section>0</Section>
+        <Text>=reformatnumber(std_labor_cost,percent_flag)</Text>
+        <Calculated>-1</Calculated>
+        <Left>7654</Left>
+        <Width>735</Width>
+        <Height>300</Height>
+        <Align>2</Align>
+        <MarginRight>30</MarginRight>
+        <Font>
+          <Name>Arial Narrow</Name>
+          <Size>8.25</Size>
+        </Font>
+      </Field>
+      <Field>
+        <Name>txt_equip_cost</Name>
+        <Section>0</Section>
+        <Text>=reformatnumber(std_equip_cost,percent_flag)</Text>
+        <Calculated>-1</Calculated>
+        <Left>8377</Left>
+        <Width>735</Width>
+        <Height>300</Height>
+        <Align>2</Align>
+        <MarginRight>30</MarginRight>
+        <Font>
+          <Name>Arial Narrow</Name>
+          <Size>8.25</Size>
+        </Font>
+      </Field>
+      <Field>
+        <Name>Line12</Name>
+        <Section>0</Section>
+        <Left>8377</Left>
+        <Height>300</Height>
+        <BorderStyle>1</BorderStyle>
+        <LineSlant>2</LineSlant>
+      </Field>
+      <Field>
+        <Name>txt_total_cost</Name>
+        <Section>0</Section>
+        <Text>=reformatnumber(std_total_cost,percent_flag)</Text>
+        <Calculated>-1</Calculated>
+        <Left>9097</Left>
+        <Width>825</Width>
+        <Height>300</Height>
+        <Align>2</Align>
+        <MarginRight>60</MarginRight>
+        <Font>
+          <Name>Arial Narrow</Name>
+          <Size>8.25</Size>
+        </Font>
+      </Field>
+      <Field>
+        <Name>Line13</Name>
+        <Section>0</Section>
+        <Left>9097</Left>
+        <Height>300</Height>
+        <BorderStyle>1</BorderStyle>
+        <LineSlant>2</LineSlant>
+      </Field>
+      <Field>
+        <Name>txt_total_cost_op</Name>
+        <Section>0</Section>
+        <Text>=reformatnumber(std_total_cost_op,percent_flag)</Text>
+        <Calculated>-1</Calculated>
+        <Left>9899</Left>
+        <Width>825</Width>
+        <Height>300</Height>
+        <Align>2</Align>
+        <MarginRight>30</MarginRight>
+        <Font>
+          <Name>Arial Narrow</Name>
+          <Size>8.25</Size>
+        </Font>
+      </Field>
+      <Field>
+        <Name>unit_cost_idCtl2</Name>
+        <Section>0</Section>
+        <Text>=Mid(unit_cost_id,6,3)</Text>
+        <Calculated>-1</Calculated>
+        <Left>10710</Left>
+        <Width>375</Width>
+        <Height>300</Height>
+        <Align>1</Align>
+        <HideDuplicates>-1</HideDuplicates>
+        <Font>
+          <Name>Arial Narrow</Name>
+          <Size>8.25</Size>
+          <Bold>-1</Bold>
+        </Font>
+      </Field>
+      <Field>
+        <Name>Line15</Name>
+        <Section>0</Section>
+        <Left>10709</Left>
+        <Height>300</Height>
+        <BorderStyle>1</BorderStyle>
+        <LineSlant>2</LineSlant>
+      </Field>
+      <Field>
+        <Name>txt_row_count</Name>
+        <Section>0</Section>
+        <Text>=1</Text>
+        <Calculated>-1</Calculated>
+        <Left>10980</Left>
+        <Width>195</Width>
+        <Height>300</Height>
+        <Align>2</Align>
+        <MarginRight>30</MarginRight>
+        <Visible>0</Visible>
+        <RunningSum>1</RunningSum>
+        <Font>
+          <Name>Arial Narrow</Name>
+          <Size>6</Size>
+        </Font>
+      </Field>
+      <Field>
+        <Name>Line100</Name>
+        <Section>0</Section>
+        <Left>360</Left>
+        <Top>270</Top>
+        <Width>10365</Width>
+        <BorderStyle>1</BorderStyle>
+        <LineSlant>2</LineSlant>
+      </Field>
+      <Field>
+        <Name>Line</Name>
+        <Section>0</Section>
+        <Left>6390</Left>
+        <Height>300</Height>
+        <BorderStyle>1</BorderStyle>
+        <LineWidth>50</LineWidth>
+        <LineSlant>1</LineSlant>
+        <ZOrder>4</ZOrder>
+      </Field>
+      <Field>
+        <Name>Line3</Name>
+        <Section>0</Section>
+        <Left>9900</Left>
+        <Height>300</Height>
+        <BorderStyle>1</BorderStyle>
+        <LineWidth>50</LineWidth>
+        <LineSlant>1</LineSlant>
+        <ZOrder>7</ZOrder>
+      </Field>
+      <Field>
+        <Name>FooterLeft</Name>
+        <Section>4</Section>
+        <Text>Now()</Text>
+        <Calculated>-1</Calculated>
+        <Top>450</Top>
+        <Width>4680</Width>
+        <Height>300</Height>
+        <Align>0</Align>
+        <Font>
+          <Size>8.25</Size>
+        </Font>
+      </Field>
+      <Field>
+        <Name>FooterRight</Name>
+        <Section>4</Section>
+        <Text>"Page " &amp; [Page] &amp; " of " &amp; [Pages]</Text>
+        <Calculated>-1</Calculated>
+        <Left>6300</Left>
+        <Top>450</Top>
+        <Width>4680</Width>
+        <Height>300</Height>
+        <Align>2</Align>
+        <Font>
+          <Size>8.25</Size>
+        </Font>
+      </Field>
+      <Field>
+        <Name>Label</Name>
+        <Section>5</Section>
+        <Text>="Division " &amp; Level1_ID</Text>
+        <Calculated>-1</Calculated>
+        <Width>10995</Width>
+        <Height>465</Height>
+        <Font>
+          <Name>Times New Roman</Name>
+          <Size>18</Size>
+          <Bold>-1</Bold>
+          <Italic>-1</Italic>
+        </Font>
+      </Field>
+      <Field>
+        <Name>Label2</Name>
+        <Section>5</Section>
+        <Text>=Level1_Desc</Text>
+        <Calculated>-1</Calculated>
+        <Top>390</Top>
+        <Width>10995</Width>
+        <Height>465</Height>
+        <Font>
+          <Name>Times New Roman</Name>
+          <Size>18</Size>
+          <Bold>-1</Bold>
+          <Italic>-1</Italic>
+        </Font>
+      </Field>
+      <Field>
+        <Name>Line7</Name>
+        <Section>7</Section>
+        <Left>360</Left>
+        <Top>360</Top>
+        <Height>555</Height>
+        <BorderStyle>1</BorderStyle>
+        <LineWidth>50</LineWidth>
+        <LineSlant>1</LineSlant>
+        <ZOrder>-3</ZOrder>
+      </Field>
+      <Field>
+        <Name>PageSubHeader</Name>
+        <Section>7</Section>
+        <Text>=Level3_ID &amp; " | " &amp; Level3_Desc</Text>
+        <Calculated>-1</Calculated>
+        <Left>360</Left>
+        <Top>360</Top>
+        <Width>4335</Width>
+        <Height>555</Height>
+        <Align>6</Align>
+        <MarginLeft>60</MarginLeft>
+        <Visible>0</Visible>
+        <HideDuplicates>-1</HideDuplicates>
+        <Font>
+          <Size>9.75</Size>
+          <Bold>-1</Bold>
+        </Font>
+        <ZOrder>-2</ZOrder>
+      </Field>
+      <Field>
+        <Name>crew_idLbl</Name>
+        <Section>7</Section>
+        <Text>CREW</Text>
+        <Left>4852</Left>
+        <Top>390</Top>
+        <Width>465</Width>
+        <Height>465</Height>
+        <Align>4</Align>
+        <MarginLeft>30</MarginLeft>
+        <WordWrap>0</WordWrap>
+        <Font>
+          <Name>Arial Narrow</Name>
+          <Size>8.25</Size>
+          <Bold>-1</Bold>
+        </Font>
+      </Field>
+      <Field>
+        <Name>daily_outputLbl</Name>
+        <Section>7</Section>
+        <Text>DAILY OUTPUT</Text>
+        <Left>5227</Left>
+        <Top>390</Top>
+        <Width>735</Width>
+        <Height>465</Height>
+        <Align>4</Align>
+        <Font>
+          <Name>Arial Narrow</Name>
+          <Size>8.25</Size>
+          <Bold>-1</Bold>
+        </Font>
+      </Field>
+      <Field>
+        <Name>std_labor_hourLbl</Name>
+        <Section>7</Section>
+        <Text>LABOR HOURS</Text>
+        <Left>5857</Left>
+        <Top>390</Top>
+        <Width>555</Width>
+        <Height>465</Height>
+        <Align>4</Align>
+        <Font>
+          <Name>Arial Narrow</Name>
+          <Size>8.25</Size>
+          <Bold>-1</Bold>
+        </Font>
+      </Field>
+      <Field>
+        <Name>unitLbl</Name>
+        <Section>7</Section>
+        <Text>UNIT</Text>
+        <Left>6391</Left>
+        <Top>390</Top>
+        <Width>555</Width>
+        <Height>465</Height>
+        <Align>4</Align>
+        <WordWrap>0</WordWrap>
+        <Font>
+          <Name>Arial Narrow</Name>
+          <Size>8.25</Size>
+          <Bold>-1</Bold>
+        </Font>
+      </Field>
+      <Field>
+        <Name>std_total_cost_opLbl</Name>
+        <Section>7</Section>
+        <Text>TOTAL INCL O&amp;P</Text>
+        <Left>9899</Left>
+        <Top>360</Top>
+        <Width>825</Width>
+        <Height>465</Height>
+        <Align>4</Align>
+        <MarginLeft>30</MarginLeft>
+        <Font>
+          <Name>Arial Narrow</Name>
+          <Size>8.25</Size>
+          <Bold>-1</Bold>
+        </Font>
+      </Field>
+      <Field>
+        <Name>PageHeader</Name>
+        <Section>7</Section>
+        <Text>=Level2_ID &amp; " | " &amp; Level2_Desc</Text>
+        <Calculated>-1</Calculated>
+        <Width>10995</Width>
+        <Height>375</Height>
+        <Align>0</Align>
+        <BackStyle>1</BackStyle>
+        <BackColor>0</BackColor>
+        <ForeColor>16777215</ForeColor>
+        <BorderStyle>1</BorderStyle>
+        <MarginLeft>50</MarginLeft>
+        <HideDuplicates>-1</HideDuplicates>
+        <WordWrap>0</WordWrap>
+        <Font>
+          <Name>Arial Black</Name>
+          <Size>12</Size>
+          <Bold>-1</Bold>
+        </Font>
+        <ZOrder>18</ZOrder>
+      </Field>
+      <Field>
+        <Name>std_mat_costLbl</Name>
+        <Section>7</Section>
+        <Text>MAT.</Text>
+        <Left>6930</Left>
+        <Top>570</Top>
+        <Width>735</Width>
+        <Height>285</Height>
+        <Align>4</Align>
+        <Font>
+          <Name>Arial Narrow</Name>
+          <Size>8.25</Size>
+          <Bold>-1</Bold>
+        </Font>
+      </Field>
+      <Field>
+        <Name>std_labor_costLbl</Name>
+        <Section>7</Section>
+        <Text>LABOR</Text>
+        <Left>7650</Left>
+        <Top>570</Top>
+        <Width>735</Width>
+        <Height>285</Height>
+        <Align>4</Align>
+        <Font>
+          <Name>Arial Narrow</Name>
+          <Size>8.25</Size>
+          <Bold>-1</Bold>
+        </Font>
+      </Field>
+      <Field>
+        <Name>std_equip_costLbl</Name>
+        <Section>7</Section>
+        <Text>EQUIP.</Text>
+        <Left>8377</Left>
+        <Top>570</Top>
+        <Width>735</Width>
+        <Height>285</Height>
+        <Align>4</Align>
+        <Font>
+          <Name>Arial Narrow</Name>
+          <Size>8.25</Size>
+          <Bold>-1</Bold>
+        </Font>
+      </Field>
+      <Field>
+        <Name>std_total_costLbl</Name>
+        <Section>7</Section>
+        <Text>TOTAL</Text>
+        <Left>9097</Left>
+        <Top>570</Top>
+        <Width>825</Width>
+        <Height>285</Height>
+        <Align>4</Align>
+        <Font>
+          <Name>Arial Narrow</Name>
+          <Size>8.25</Size>
+          <Bold>-1</Bold>
+        </Font>
+      </Field>
+      <Field>
+        <Name>Line5</Name>
+        <Section>7</Section>
+        <Left>6390</Left>
+        <Top>360</Top>
+        <Height>555</Height>
+        <BorderStyle>1</BorderStyle>
+        <LineWidth>50</LineWidth>
+        <LineSlant>1</LineSlant>
+        <ZOrder>9</ZOrder>
+      </Field>
+      <Field>
+        <Name>Line4</Name>
+        <Section>7</Section>
+        <Left>4860</Left>
+        <Top>360</Top>
+        <Height>555</Height>
+        <BackStyle>1</BackStyle>
+        <BorderStyle>1</BorderStyle>
+        <LineWidth>50</LineWidth>
+        <LineSlant>1</LineSlant>
+        <ZOrder>11</ZOrder>
+      </Field>
+      <Field>
+        <Name>Label1</Name>
+        <Section>7</Section>
+        <Text>STANDARD BARE COSTS</Text>
+        <Left>6930</Left>
+        <Top>375</Top>
+        <Width>2970</Width>
+        <Height>225</Height>
+        <Align>4</Align>
+        <Font>
+          <Name>Arial Narrow</Name>
+          <Size>8.25</Size>
+          <Bold>-1</Bold>
+        </Font>
+        <ZOrder>16</ZOrder>
+      </Field>
+      <Field>
+        <Name>Line6</Name>
+        <Section>7</Section>
+        <Left>9900</Left>
+        <Top>360</Top>
+        <Height>555</Height>
+        <BorderStyle>1</BorderStyle>
+        <LineWidth>50</LineWidth>
+        <LineSlant>1</LineSlant>
+        <ZOrder>17</ZOrder>
+      </Field>
+      <Field>
+        <Name>PageSubHeader1</Name>
+        <Section>9</Section>
+        <Text>=Level3_ID &amp; " | " &amp; Level3_Desc</Text>
+        <Calculated>-1</Calculated>
+        <Left>360</Left>
+        <Width>9555</Width>
+        <Height>600</Height>
+        <Align>6</Align>
+        <MarginLeft>60</MarginLeft>
+        <HideDuplicates>-1</HideDuplicates>
+        <Font>
+          <Name>Arial Black</Name>
+          <Size>12</Size>
+          <Bold>-1</Bold>
+        </Font>
+        <ZOrder>-2</ZOrder>
+      </Field>
+      <Field>
+        <Name>Line16</Name>
+        <Section>9</Section>
+        <Left>360</Left>
+        <Height>600</Height>
+        <BorderStyle>1</BorderStyle>
+        <LineWidth>50</LineWidth>
+        <LineSlant>1</LineSlant>
+        <ZOrder>19</ZOrder>
+      </Field>
+      <Field>
+        <Name>Line17</Name>
+        <Section>9</Section>
+        <Left>9900</Left>
+        <Height>600</Height>
+        <BorderStyle>1</BorderStyle>
+        <LineWidth>50</LineWidth>
+        <LineSlant>1</LineSlant>
+        <ZOrder>19</ZOrder>
+      </Field>
+      <Field>
+        <Name>Line18</Name>
+        <Section>7</Section>
+        <Left>5310</Left>
+        <Top>360</Top>
+        <Height>555</Height>
+        <BorderStyle>1</BorderStyle>
+        <LineSlant>2</LineSlant>
+      </Field>
+      <Field>
+        <Name>Line19</Name>
+        <Section>7</Section>
+        <Left>5857</Left>
+        <Top>360</Top>
+        <Height>555</Height>
+        <BorderStyle>1</BorderStyle>
+        <LineSlant>2</LineSlant>
+      </Field>
+      <Field>
+        <Name>Line20</Name>
+        <Section>7</Section>
+        <Left>6930</Left>
+        <Top>360</Top>
+        <Height>555</Height>
+        <BorderStyle>1</BorderStyle>
+        <LineSlant>2</LineSlant>
+      </Field>
+      <Field>
+        <Name>Line21</Name>
+        <Section>7</Section>
+        <Left>10709</Left>
+        <Top>360</Top>
+        <Height>555</Height>
+        <BorderStyle>1</BorderStyle>
+        <LineSlant>2</LineSlant>
+      </Field>
+      <Field>
+        <Name>Line22</Name>
+        <Section>7</Section>
+        <Top>900</Top>
+        <Width>10995</Width>
+        <BorderStyle>1</BorderStyle>
+        <LineWidth>50</LineWidth>
+        <LineSlant>2</LineSlant>
+      </Field>
+      <Field>
+        <Name>Line23</Name>
+        <Section>9</Section>
+        <Left>10709</Left>
+        <Height>600</Height>
+        <BorderStyle>1</BorderStyle>
+        <LineSlant>2</LineSlant>
+      </Field>
+      <Field>
+        <Name>Line24</Name>
+        <Section>9</Section>
+        <Top>600</Top>
+        <Width>10995</Width>
+        <BorderStyle>1</BorderStyle>
+        <LineWidth>50</LineWidth>
+        <LineSlant>2</LineSlant>
+      </Field>
+      <Field>
+        <Name>Line25</Name>
+        <Section>10</Section>
+        <Width>10995</Width>
+        <BorderStyle>1</BorderStyle>
+        <LineWidth>50</LineWidth>
+        <LineSlant>2</LineSlant>
+      </Field>
+      <Field>
+        <Name>FooterLeft1</Name>
+        <Section>4</Section>
+        <Text>Output_Desc</Text>
+        <Calculated>-1</Calculated>
+        <Left>3240</Left>
+        <Top>450</Top>
+        <Width>4680</Width>
+        <Height>300</Height>
+        <Align>1</Align>
+        <Font>
+          <Size>8.25</Size>
+        </Font>
+      </Field>
+      <Field>
+        <Name>txtRefID</Name>
+        <Section>0</Section>
+        <Text>R</Text>
+        <Format>@</Format>
+        <Left>4600</Left>
+        <Top>40</Top>
+        <Width>210</Width>
+        <Height>210</Height>
+        <Align>1</Align>
+        <BackStyle>1</BackStyle>
+        <BorderStyle>1</BorderStyle>
+        <LineWidth>24</LineWidth>
+        <Font>
+          <Name>Arial Narrow</Name>
+          <Size>8.25</Size>
+          <Bold>-1</Bold>
+        </Font>
+      </Field>
+      <Field>
+        <Name>txtGraphicRef</Name>
+        <Section>0</Section>
+        <Text>=nz(Graphic_Ref) &gt; " "</Text>
+        <Calculated>-1</Calculated>
+        <CheckBox>3</CheckBox>
+        <Left>4590</Left>
+        <Top>45</Top>
+        <Width>195</Width>
+        <Height>195</Height>
+        <Align>2</Align>
+        <Font>
+          <Name>Wingdings</Name>
+        </Font>
+      </Field>
+    </Fields>
+  </Report>
+
+  <!-- Report *** MF-1995 Standard Book Format *** -->
+  <Report>
+    <Name>MF-1995 Standard Book Format</Name>
+    <DataSource>
+      <ConnectionString>Provider=SQLNCLI.1;Integrated Security=SSPI;Persist Security Info=False;Initial Catalog=ccddev;Data Source=binnorsqld002\sql2k5</ConnectionString>
+      <RecordSource>exec usp_select_book_format 
+@start_book_unit_cost_id = '047100000000', @end_book_unit_cost_id = '047199999999', @master_format_version = '1995', @book_output_id = 1</RecordSource>
+    </DataSource>
+    <Layout>
+      <Width>11175</Width>
+      <MarginLeft>720</MarginLeft>
+      <MarginTop>720</MarginTop>
+      <MarginRight>720</MarginRight>
+      <MarginBottom>720</MarginBottom>
+      <Orientation>1</Orientation>
+    </Layout>
+    <OnOpen>function formatdescription(book_desc,indent_code,format_char)
+  on error resume next
+  s = Trim(book_desc)
+  if nz(format_char) &gt; "0" then
+     s = "\b " &amp; left(s, format_char) &amp; "\b0 " &amp; mid(s, format_char + 1)
+  end if
+  if not isnull(indent_code) then
+    i = clng(indent_code)
+    s = space(i * 4) &amp; s
+  end if
+  formatdescription = "{" &amp; s &amp; "}"
+end function
+
+function reformatnumber(value, percent_flag)
+  on error resume next
+  v = 0
+  v = trim(value)
+  if v = "" or v = "0" then
+    s = ""
+  elseif percent_flag = "Y" then
+    v = cdbl(v) / 100
+    s = formatpercent(v, 1)
+  else
+    v = cdbl(v)
+    f = 2
+    if v &gt;= 100000 then f = 0
+    s = formatnumber(v, f, -1, 0, -1)
+  end if
+  reformatnumber = s
+end function
+
+function nz(value) 
+  on error resume next
+  if isnull(value) then
+    nz = ""
+  else
+    nz = value
+  end if
+end function
+
+function formatcrewqtyid(crew_qty, crew_id, crew_type_code)
+  on error resume next
+
+  crewqty = 0
+  crewid = ""
+  crewtypecode = ""
+
+  if not isnull(crew_qty) then
+    crewqty = trim(crew_qty)
+  end if
+
+  if not isnull(crew_id) then
+    crewid = trim(crew_id)
+  end if
+
+  if not isnull(crew_type_code) then
+    crewtypecode = trim(crew_type_code)
+  end if
+
+  if crewid = "" then
+    s = ""
+  else
+    if crewtypecode = "C" then
+      s = crewid
+    else 
+      if crewtypecode = "L" then
+        s = formatnumber(crewqty, 0, 0, 0, 0) &amp; " " &amp; crewid
+      else
+        s = "n/a"
+      end if
+    end if
+  end if
+
+  formatcrewqtyid = s
+
+end function</OnOpen>
+    <Groups>
+      <Group>
+        <Name>Group 1</Name>
+        <GroupBy>Level1_ID</GroupBy>
+        <Sort>1</Sort>
+      </Group>
+      <Group>
+        <Name>Group 2</Name>
+        <GroupBy>Level2_ID</GroupBy>
+        <Sort>1</Sort>
+      </Group>
+      <Group>
+        <Name>Group 3</Name>
+        <GroupBy>Level3_ID</GroupBy>
+        <Sort>1</Sort>
+      </Group>
+    </Groups>
+    <Sections>
+      <Section>
+        <Name>Detail</Name>
+        <Height>300</Height>
+        <OnPrint>Line100.Visible = (txt_row_count mod 2 = 0)
+sTemp = Left(table_ref, 1)
+txtRefID.Text = sTemp
+txtRefID.Visible = (sTemp = "R")
+txtGraphicRef.Visible = (nz(Graphic_Ref) &gt; " ")</OnPrint>
+      </Section>
+      <Section>
+        <Name>Header</Name>
+        <Type>1</Type>
+      </Section>
+      <Section>
+        <Name>Footer</Name>
+        <Type>2</Type>
+        <Visible>0</Visible>
+      </Section>
+      <Section>
+        <Name>Page Header</Name>
+        <Type>3</Type>
+      </Section>
+      <Section>
+        <Name>Page Footer</Name>
+        <Type>4</Type>
+        <Height>765</Height>
+      </Section>
+      <Section>
+        <Name>Group 0 Header</Name>
+        <Type>5</Type>
+        <Height>1275</Height>
+      </Section>
+      <Section>
+        <Name>Group 0 Footer</Name>
+        <Type>6</Type>
+        <Height>60</Height>
+        <ForcePageBreak>2</ForcePageBreak>
+      </Section>
+      <Section>
+        <Name>Group 1 Header</Name>
+        <Type>7</Type>
+        <Height>915</Height>
+        <Repeat>-1</Repeat>
+        <OnFormat>PageSubHeader.Visible = (Page &gt; 1)</OnFormat>
+      </Section>
+      <Section>
+        <Name>Group 1 Footer</Name>
+        <Type>8</Type>
+        <Height>315</Height>
+      </Section>
+      <Section>
+        <Name>Group 2 Header</Name>
+        <Type>9</Type>
+        <Height>600</Height>
+      </Section>
+      <Section>
+        <Name>Group 2 Footer</Name>
+        <Type>10</Type>
+        <Height>40</Height>
+      </Section>
+    </Sections>
+    <Fields>
+      <Field>
+        <Name>Line1</Name>
+        <Section>0</Section>
+        <Left>4860</Left>
+        <Height>300</Height>
+        <BorderStyle>1</BorderStyle>
+        <LineWidth>50</LineWidth>
+        <LineSlant>1</LineSlant>
+        <ZOrder>-4</ZOrder>
+      </Field>
+      <Field>
+        <Name>Line2</Name>
+        <Section>0</Section>
+        <Left>360</Left>
+        <Height>300</Height>
+        <BorderStyle>1</BorderStyle>
+        <LineWidth>50</LineWidth>
+        <LineSlant>1</LineSlant>
+        <ZOrder>-3</ZOrder>
+      </Field>
+      <Field>
+        <Name>unit_cost_idCtl1</Name>
+        <Section>0</Section>
+        <Text>=Mid(unit_cost_id,6,3)</Text>
+        <Calculated>-1</Calculated>
+        <Width>375</Width>
+        <Height>300</Height>
+        <Align>1</Align>
+        <HideDuplicates>-1</HideDuplicates>
+        <Font>
+          <Name>Arial Narrow</Name>
+          <Size>8.25</Size>
+          <Bold>-1</Bold>
+        </Font>
+      </Field>
+      <Field>
+        <Name>unit_cost_idCtl</Name>
+        <Section>0</Section>
+        <Text>=Right(unit_cost_id,4)</Text>
+        <Calculated>-1</Calculated>
+        <Left>360</Left>
+        <Width>465</Width>
+        <Height>300</Height>
+        <Align>1</Align>
+        <Font>
+          <Name>Arial Narrow</Name>
+          <Size>8.25</Size>
+        </Font>
+      </Field>
+      <Field>
+        <Name>Line14</Name>
+        <Section>0</Section>
+        <Left>810</Left>
+        <Height>300</Height>
+        <BorderStyle>1</BorderStyle>
+        <LineSlant>2</LineSlant>
+      </Field>
+      <Field>
+        <Name>book_descCtl</Name>
+        <Section>0</Section>
+        <Text>=formatdescription(book_desc,indent_code,format_characters)</Text>
+        <Calculated>-1</Calculated>
+        <RTF>-1</RTF>
+        <Left>814</Left>
+        <Width>4065</Width>
+        <Height>300</Height>
+        <Align>0</Align>
+        <MarginLeft>60</MarginLeft>
+        <Font>
+          <Name>Arial Narrow</Name>
+          <Size>8.25</Size>
+        </Font>
+      </Field>
+      <Field>
+        <Name>crew_idCtl</Name>
+        <Section>0</Section>
+        <Text>=formatcrewqtyid(crew_qty, crew_id, crew_type_code)</Text>
+        <Calculated>-1</Calculated>
+        <Left>4867</Left>
+        <Width>465</Width>
+        <Height>300</Height>
+        <Align>1</Align>
+        <Font>
+          <Name>Arial Narrow</Name>
+          <Size>6</Size>
+        </Font>
+      </Field>
+      <Field>
+        <Name>Line8</Name>
+        <Section>0</Section>
+        <Left>5310</Left>
+        <Height>300</Height>
+        <BorderStyle>1</BorderStyle>
+        <LineSlant>2</LineSlant>
+      </Field>
+      <Field>
+        <Name>daily_outputCtl</Name>
+        <Section>0</Section>
+        <Text>daily_output</Text>
+        <Calculated>-1</Calculated>
+        <Format>#.##</Format>
+        <Left>5317</Left>
+        <Width>540</Width>
+        <Height>300</Height>
+        <Align>1</Align>
+        <Font>
+          <Name>Arial Narrow</Name>
+          <Size>8.25</Size>
+        </Font>
+      </Field>
+      <Field>
+        <Name>Line9</Name>
+        <Section>0</Section>
+        <Left>5857</Left>
+        <Height>300</Height>
+        <BorderStyle>1</BorderStyle>
+        <LineSlant>2</LineSlant>
+      </Field>
+      <Field>
+        <Name>std_labor_hourCtl</Name>
+        <Section>0</Section>
+        <Text>std_labor_hour</Text>
+        <Calculated>-1</Calculated>
+        <Format>#,##0.000</Format>
+        <Left>5857</Left>
+        <Width>555</Width>
+        <Height>300</Height>
+        <Align>1</Align>
+        <Font>
+          <Name>Arial Narrow</Name>
+          <Size>8.25</Size>
+        </Font>
+      </Field>
+      <Field>
+        <Name>unitCtl</Name>
+        <Section>0</Section>
+        <Text>=Trim(unit)</Text>
+        <Calculated>-1</Calculated>
+        <Left>6391</Left>
+        <Width>555</Width>
+        <Height>300</Height>
+        <Align>1</Align>
+        <Font>
+          <Name>Arial Narrow</Name>
+          <Size>8.25</Size>
+        </Font>
+      </Field>
+      <Field>
+        <Name>Line10</Name>
+        <Section>0</Section>
+        <Left>6930</Left>
+        <Height>300</Height>
+        <BorderStyle>1</BorderStyle>
+        <LineSlant>2</LineSlant>
+      </Field>
+      <Field>
+        <Name>txt_mat_cost</Name>
+        <Section>0</Section>
+        <Text>=reformatnumber(res_mat_cost,percent_flag)</Text>
+        <Calculated>-1</Calculated>
+        <Left>6930</Left>
+        <Width>735</Width>
+        <Height>300</Height>
+        <Align>2</Align>
+        <MarginRight>30</MarginRight>
+        <Font>
+          <Name>Arial Narrow</Name>
+          <Size>8.25</Size>
+        </Font>
+      </Field>
+      <Field>
+        <Name>Line11</Name>
+        <Section>0</Section>
+        <Left>7650</Left>
+        <Height>300</Height>
+        <BorderStyle>1</BorderStyle>
+        <LineSlant>2</LineSlant>
+      </Field>
+      <Field>
+        <Name>txt_labor_cost</Name>
+        <Section>0</Section>
+        <Text>=reformatnumber(res_labor_cost,percent_flag)</Text>
+        <Calculated>-1</Calculated>
+        <Left>7654</Left>
+        <Width>735</Width>
+        <Height>300</Height>
+        <Align>2</Align>
+        <MarginRight>30</MarginRight>
+        <Font>
+          <Name>Arial Narrow</Name>
+          <Size>8.25</Size>
+        </Font>
+      </Field>
+      <Field>
+        <Name>txt_equip_cost</Name>
+        <Section>0</Section>
+        <Text>=reformatnumber(res_equip_cost,percent_flag)</Text>
+        <Calculated>-1</Calculated>
+        <Left>8377</Left>
+        <Width>735</Width>
+        <Height>300</Height>
+        <Align>2</Align>
+        <MarginRight>30</MarginRight>
+        <Font>
+          <Name>Arial Narrow</Name>
+          <Size>8.25</Size>
+        </Font>
+      </Field>
+      <Field>
+        <Name>Line12</Name>
+        <Section>0</Section>
+        <Left>8377</Left>
+        <Height>300</Height>
+        <BorderStyle>1</BorderStyle>
+        <LineSlant>2</LineSlant>
+      </Field>
+      <Field>
+        <Name>txt_total_cost</Name>
+        <Section>0</Section>
+        <Text>=reformatnumber(res_total_cost,percent_flag)</Text>
+        <Calculated>-1</Calculated>
+        <Left>9097</Left>
+        <Width>825</Width>
+        <Height>300</Height>
+        <Align>2</Align>
+        <MarginRight>60</MarginRight>
+        <Font>
+          <Name>Arial Narrow</Name>
+          <Size>8.25</Size>
+        </Font>
+      </Field>
+      <Field>
+        <Name>Line13</Name>
+        <Section>0</Section>
+        <Left>9097</Left>
+        <Height>300</Height>
+        <BorderStyle>1</BorderStyle>
+        <LineSlant>2</LineSlant>
+      </Field>
+      <Field>
+        <Name>txt_total_cost_op</Name>
+        <Section>0</Section>
+        <Text>=reformatnumber(res_total_cost_op,percent_flag)</Text>
+        <Calculated>-1</Calculated>
+        <Left>9899</Left>
+        <Width>825</Width>
+        <Height>300</Height>
+        <Align>2</Align>
+        <MarginRight>30</MarginRight>
+        <Font>
+          <Name>Arial Narrow</Name>
+          <Size>8.25</Size>
+        </Font>
+      </Field>
+      <Field>
+        <Name>unit_cost_idCtl2</Name>
+        <Section>0</Section>
+        <Text>=Mid(unit_cost_id,6,3)</Text>
+        <Calculated>-1</Calculated>
+        <Left>10710</Left>
+        <Width>375</Width>
+        <Height>300</Height>
+        <Align>1</Align>
+        <HideDuplicates>-1</HideDuplicates>
+        <Font>
+          <Name>Arial Narrow</Name>
+          <Size>8.25</Size>
+          <Bold>-1</Bold>
+        </Font>
+      </Field>
+      <Field>
+        <Name>Line15</Name>
+        <Section>0</Section>
+        <Left>10709</Left>
+        <Height>300</Height>
+        <BorderStyle>1</BorderStyle>
+        <LineSlant>2</LineSlant>
+      </Field>
+      <Field>
+        <Name>txt_row_count</Name>
+        <Section>0</Section>
+        <Text>=1</Text>
+        <Calculated>-1</Calculated>
+        <Left>10980</Left>
+        <Width>195</Width>
+        <Height>300</Height>
+        <Align>2</Align>
+        <MarginRight>30</MarginRight>
+        <Visible>0</Visible>
+        <RunningSum>1</RunningSum>
+        <Font>
+          <Name>Arial Narrow</Name>
+          <Size>6</Size>
+        </Font>
+      </Field>
+      <Field>
+        <Name>Line100</Name>
+        <Section>0</Section>
+        <Left>360</Left>
+        <Top>270</Top>
+        <Width>10365</Width>
+        <BorderStyle>1</BorderStyle>
+        <LineSlant>2</LineSlant>
+      </Field>
+      <Field>
+        <Name>Line</Name>
+        <Section>0</Section>
+        <Left>6390</Left>
+        <Height>300</Height>
+        <BorderStyle>1</BorderStyle>
+        <LineWidth>50</LineWidth>
+        <LineSlant>1</LineSlant>
+        <ZOrder>4</ZOrder>
+      </Field>
+      <Field>
+        <Name>Line3</Name>
+        <Section>0</Section>
+        <Left>9900</Left>
+        <Height>300</Height>
+        <BorderStyle>1</BorderStyle>
+        <LineWidth>50</LineWidth>
+        <LineSlant>1</LineSlant>
+        <ZOrder>7</ZOrder>
+      </Field>
+      <Field>
+        <Name>FooterLeft</Name>
+        <Section>4</Section>
+        <Text>Now()</Text>
+        <Calculated>-1</Calculated>
+        <Top>450</Top>
+        <Width>4680</Width>
+        <Height>300</Height>
+        <Align>0</Align>
+        <Font>
+          <Size>8.25</Size>
+        </Font>
+      </Field>
+      <Field>
+        <Name>FooterRight</Name>
+        <Section>4</Section>
+        <Text>"Page " &amp; [Page] &amp; " of " &amp; [Pages]</Text>
+        <Calculated>-1</Calculated>
+        <Left>6300</Left>
+        <Top>450</Top>
+        <Width>4680</Width>
+        <Height>300</Height>
+        <Align>2</Align>
+        <Font>
+          <Size>8.25</Size>
+        </Font>
+      </Field>
+      <Field>
+        <Name>Label</Name>
+        <Section>5</Section>
+        <Text>="Division " &amp; Level1_ID</Text>
+        <Calculated>-1</Calculated>
+        <Width>10995</Width>
+        <Height>465</Height>
+        <Font>
+          <Name>Times New Roman</Name>
+          <Size>18</Size>
+          <Bold>-1</Bold>
+          <Italic>-1</Italic>
+        </Font>
+      </Field>
+      <Field>
+        <Name>Label2</Name>
+        <Section>5</Section>
+        <Text>=Level1_Desc</Text>
+        <Calculated>-1</Calculated>
+        <Top>390</Top>
+        <Width>10995</Width>
+        <Height>465</Height>
+        <Font>
+          <Name>Times New Roman</Name>
+          <Size>18</Size>
+          <Bold>-1</Bold>
+          <Italic>-1</Italic>
+        </Font>
+      </Field>
+      <Field>
+        <Name>Line7</Name>
+        <Section>7</Section>
+        <Left>360</Left>
+        <Top>360</Top>
+        <Height>555</Height>
+        <BorderStyle>1</BorderStyle>
+        <LineWidth>50</LineWidth>
+        <LineSlant>1</LineSlant>
+        <ZOrder>-3</ZOrder>
+      </Field>
+      <Field>
+        <Name>PageSubHeader</Name>
+        <Section>7</Section>
+        <Text>=Level3_ID &amp; " | " &amp; Level3_Desc</Text>
+        <Calculated>-1</Calculated>
+        <Left>360</Left>
+        <Top>360</Top>
+        <Width>4335</Width>
+        <Height>555</Height>
+        <Align>6</Align>
+        <MarginLeft>60</MarginLeft>
+        <Visible>0</Visible>
+        <HideDuplicates>-1</HideDuplicates>
+        <Font>
+          <Size>9.75</Size>
+          <Bold>-1</Bold>
+        </Font>
+        <ZOrder>-2</ZOrder>
+      </Field>
+      <Field>
+        <Name>crew_idLbl</Name>
+        <Section>7</Section>
+        <Text>CREW</Text>
+        <Left>4852</Left>
+        <Top>390</Top>
+        <Width>465</Width>
+        <Height>465</Height>
+        <Align>4</Align>
+        <MarginLeft>30</MarginLeft>
+        <WordWrap>0</WordWrap>
+        <Font>
+          <Name>Arial Narrow</Name>
+          <Size>8.25</Size>
+          <Bold>-1</Bold>
+        </Font>
+      </Field>
+      <Field>
+        <Name>daily_outputLbl</Name>
+        <Section>7</Section>
+        <Text>DAILY OUTPUT</Text>
+        <Left>5227</Left>
+        <Top>390</Top>
+        <Width>735</Width>
+        <Height>465</Height>
+        <Align>4</Align>
+        <Font>
+          <Name>Arial Narrow</Name>
+          <Size>8.25</Size>
+          <Bold>-1</Bold>
+        </Font>
+      </Field>
+      <Field>
+        <Name>std_labor_hourLbl</Name>
+        <Section>7</Section>
+        <Text>LABOR HOURS</Text>
+        <Left>5857</Left>
+        <Top>390</Top>
+        <Width>555</Width>
+        <Height>465</Height>
+        <Align>4</Align>
+        <Font>
+          <Name>Arial Narrow</Name>
+          <Size>8.25</Size>
+          <Bold>-1</Bold>
+        </Font>
+      </Field>
+      <Field>
+        <Name>unitLbl</Name>
+        <Section>7</Section>
+        <Text>UNIT</Text>
+        <Left>6391</Left>
+        <Top>390</Top>
+        <Width>555</Width>
+        <Height>465</Height>
+        <Align>4</Align>
+        <WordWrap>0</WordWrap>
+        <Font>
+          <Name>Arial Narrow</Name>
+          <Size>8.25</Size>
+          <Bold>-1</Bold>
+        </Font>
+      </Field>
+      <Field>
+        <Name>std_total_cost_opLbl</Name>
+        <Section>7</Section>
+        <Text>TOTAL INCL O&amp;P</Text>
+        <Left>9899</Left>
+        <Top>360</Top>
+        <Width>825</Width>
+        <Height>465</Height>
+        <Align>4</Align>
+        <MarginLeft>30</MarginLeft>
+        <Font>
+          <Name>Arial Narrow</Name>
+          <Size>8.25</Size>
+          <Bold>-1</Bold>
+        </Font>
+      </Field>
+      <Field>
+        <Name>PageHeader</Name>
+        <Section>7</Section>
+        <Text>=Level2_ID &amp; " | " &amp; Level2_Desc</Text>
+        <Calculated>-1</Calculated>
+        <Width>10995</Width>
+        <Height>375</Height>
+        <Align>0</Align>
+        <BackStyle>1</BackStyle>
+        <BackColor>0</BackColor>
+        <ForeColor>16777215</ForeColor>
+        <BorderStyle>1</BorderStyle>
+        <MarginLeft>50</MarginLeft>
+        <HideDuplicates>-1</HideDuplicates>
+        <WordWrap>0</WordWrap>
+        <Font>
+          <Name>Arial Black</Name>
+          <Size>12</Size>
+          <Bold>-1</Bold>
+        </Font>
+        <ZOrder>18</ZOrder>
+      </Field>
+      <Field>
+        <Name>std_mat_costLbl</Name>
+        <Section>7</Section>
+        <Text>MAT.</Text>
+        <Left>6930</Left>
+        <Top>570</Top>
+        <Width>735</Width>
+        <Height>285</Height>
+        <Align>4</Align>
+        <Font>
+          <Name>Arial Narrow</Name>
+          <Size>8.25</Size>
+          <Bold>-1</Bold>
+        </Font>
+      </Field>
+      <Field>
+        <Name>std_labor_costLbl</Name>
+        <Section>7</Section>
+        <Text>LABOR</Text>
+        <Left>7650</Left>
+        <Top>570</Top>
+        <Width>735</Width>
+        <Height>285</Height>
+        <Align>4</Align>
+        <Font>
+          <Name>Arial Narrow</Name>
+          <Size>8.25</Size>
+          <Bold>-1</Bold>
+        </Font>
+      </Field>
+      <Field>
+        <Name>std_equip_costLbl</Name>
+        <Section>7</Section>
+        <Text>EQUIP.</Text>
+        <Left>8377</Left>
+        <Top>570</Top>
+        <Width>735</Width>
+        <Height>285</Height>
+        <Align>4</Align>
+        <Font>
+          <Name>Arial Narrow</Name>
+          <Size>8.25</Size>
+          <Bold>-1</Bold>
+        </Font>
+      </Field>
+      <Field>
+        <Name>std_total_costLbl</Name>
+        <Section>7</Section>
+        <Text>TOTAL</Text>
+        <Left>9097</Left>
+        <Top>570</Top>
+        <Width>825</Width>
+        <Height>285</Height>
+        <Align>4</Align>
+        <Font>
+          <Name>Arial Narrow</Name>
+          <Size>8.25</Size>
+          <Bold>-1</Bold>
+        </Font>
+      </Field>
+      <Field>
+        <Name>Line5</Name>
+        <Section>7</Section>
+        <Left>6390</Left>
+        <Top>360</Top>
+        <Height>555</Height>
+        <BorderStyle>1</BorderStyle>
+        <LineWidth>50</LineWidth>
+        <LineSlant>1</LineSlant>
+        <ZOrder>9</ZOrder>
+      </Field>
+      <Field>
+        <Name>Line4</Name>
+        <Section>7</Section>
+        <Left>4860</Left>
+        <Top>360</Top>
+        <Height>555</Height>
+        <BackStyle>1</BackStyle>
+        <BorderStyle>1</BorderStyle>
+        <LineWidth>50</LineWidth>
+        <LineSlant>1</LineSlant>
+        <ZOrder>11</ZOrder>
+      </Field>
+      <Field>
+        <Name>Label1</Name>
+        <Section>7</Section>
+        <Text>STANDARD BARE COSTS</Text>
+        <Left>6930</Left>
+        <Top>375</Top>
+        <Width>2970</Width>
+        <Height>225</Height>
+        <Align>4</Align>
+        <Font>
+          <Name>Arial Narrow</Name>
+          <Size>8.25</Size>
+          <Bold>-1</Bold>
+        </Font>
+        <ZOrder>16</ZOrder>
+      </Field>
+      <Field>
+        <Name>Line6</Name>
+        <Section>7</Section>
+        <Left>9900</Left>
+        <Top>360</Top>
+        <Height>555</Height>
+        <BorderStyle>1</BorderStyle>
+        <LineWidth>50</LineWidth>
+        <LineSlant>1</LineSlant>
+        <ZOrder>17</ZOrder>
+      </Field>
+      <Field>
+        <Name>PageSubHeader1</Name>
+        <Section>9</Section>
+        <Text>=Level3_ID &amp; " | " &amp; Level3_Desc</Text>
+        <Calculated>-1</Calculated>
+        <Left>360</Left>
+        <Width>9555</Width>
+        <Height>600</Height>
+        <Align>6</Align>
+        <MarginLeft>60</MarginLeft>
+        <HideDuplicates>-1</HideDuplicates>
+        <Font>
+          <Name>Arial Black</Name>
+          <Size>12</Size>
+          <Bold>-1</Bold>
+        </Font>
+        <ZOrder>-2</ZOrder>
+      </Field>
+      <Field>
+        <Name>Line16</Name>
+        <Section>9</Section>
+        <Left>360</Left>
+        <Height>600</Height>
+        <BorderStyle>1</BorderStyle>
+        <LineWidth>50</LineWidth>
+        <LineSlant>1</LineSlant>
+        <ZOrder>19</ZOrder>
+      </Field>
+      <Field>
+        <Name>Line17</Name>
+        <Section>9</Section>
+        <Left>9900</Left>
+        <Height>600</Height>
+        <BorderStyle>1</BorderStyle>
+        <LineWidth>50</LineWidth>
+        <LineSlant>1</LineSlant>
+        <ZOrder>19</ZOrder>
+      </Field>
+      <Field>
+        <Name>Line18</Name>
+        <Section>7</Section>
+        <Left>5310</Left>
+        <Top>360</Top>
+        <Height>555</Height>
+        <BorderStyle>1</BorderStyle>
+        <LineSlant>2</LineSlant>
+      </Field>
+      <Field>
+        <Name>Line19</Name>
+        <Section>7</Section>
+        <Left>5857</Left>
+        <Top>360</Top>
+        <Height>555</Height>
+        <BorderStyle>1</BorderStyle>
+        <LineSlant>2</LineSlant>
+      </Field>
+      <Field>
+        <Name>Line20</Name>
+        <Section>7</Section>
+        <Left>6930</Left>
+        <Top>360</Top>
+        <Height>555</Height>
+        <BorderStyle>1</BorderStyle>
+        <LineSlant>2</LineSlant>
+      </Field>
+      <Field>
+        <Name>Line21</Name>
+        <Section>7</Section>
+        <Left>10709</Left>
+        <Top>360</Top>
+        <Height>555</Height>
+        <BorderStyle>1</BorderStyle>
+        <LineSlant>2</LineSlant>
+      </Field>
+      <Field>
+        <Name>Line22</Name>
+        <Section>7</Section>
+        <Top>900</Top>
+        <Width>10995</Width>
+        <BorderStyle>1</BorderStyle>
+        <LineWidth>50</LineWidth>
+        <LineSlant>2</LineSlant>
+      </Field>
+      <Field>
+        <Name>Line23</Name>
+        <Section>9</Section>
+        <Left>10709</Left>
+        <Height>600</Height>
+        <BorderStyle>1</BorderStyle>
+        <LineSlant>2</LineSlant>
+      </Field>
+      <Field>
+        <Name>Line24</Name>
+        <Section>9</Section>
+        <Top>600</Top>
+        <Width>10995</Width>
+        <BorderStyle>1</BorderStyle>
+        <LineWidth>50</LineWidth>
+        <LineSlant>2</LineSlant>
+      </Field>
+      <Field>
+        <Name>Line25</Name>
+        <Section>10</Section>
+        <Width>10995</Width>
+        <BorderStyle>1</BorderStyle>
+        <LineWidth>50</LineWidth>
+        <LineSlant>2</LineSlant>
+      </Field>
+      <Field>
+        <Name>FooterLeft1</Name>
+        <Section>4</Section>
+        <Text>Output_Desc</Text>
+        <Calculated>-1</Calculated>
+        <Left>3240</Left>
+        <Top>450</Top>
+        <Width>4680</Width>
+        <Height>300</Height>
+        <Align>1</Align>
+        <Font>
+          <Size>8.25</Size>
+        </Font>
+      </Field>
+      <Field>
+        <Name>txtRefID</Name>
+        <Section>0</Section>
+        <Text>R</Text>
+        <Format>@</Format>
+        <Left>4600</Left>
+        <Top>40</Top>
+        <Width>210</Width>
+        <Height>210</Height>
+        <Align>1</Align>
+        <BackStyle>1</BackStyle>
+        <BorderStyle>1</BorderStyle>
+        <LineWidth>24</LineWidth>
+        <Font>
+          <Name>Arial Narrow</Name>
+          <Size>8.25</Size>
+          <Bold>-1</Bold>
+        </Font>
+      </Field>
+      <Field>
+        <Name>txtGraphicRef</Name>
+        <Section>0</Section>
+        <Text>=nz(Graphic_Ref) &gt; " "</Text>
+        <Calculated>-1</Calculated>
+        <CheckBox>3</CheckBox>
+        <Left>4590</Left>
+        <Top>45</Top>
+        <Width>195</Width>
+        <Height>195</Height>
+        <Align>2</Align>
+        <Font>
+          <Name>Wingdings</Name>
+        </Font>
+      </Field>
+    </Fields>
+  </Report>
+
+  <!-- Report *** MF-2004 Metric Book Format *** -->
+  <Report>
+    <Name>MF-2004 Metric Book Format</Name>
+    <DataSource>
+      <ConnectionString>Provider=SQLNCLI.1;Integrated Security=SSPI;Persist Security Info=False;Initial Catalog=ccddev;Data Source=binnorsqld002\sql2k5</ConnectionString>
+      <RecordSource>exec usp_select_book_format 
+@start_book_unit_cost_id = '047100000000', @end_book_unit_cost_id = '047199999999', @master_format_version = '2004', @book_output_id = 1</RecordSource>
+    </DataSource>
+    <Layout>
+      <Width>11175</Width>
+      <MarginLeft>720</MarginLeft>
+      <MarginTop>720</MarginTop>
+      <MarginRight>720</MarginRight>
+      <MarginBottom>720</MarginBottom>
+      <Orientation>1</Orientation>
+    </Layout>
+    <OnOpen>function formatdescription(book_desc,indent_code,format_char)
+  on error resume next
+  s = Trim(book_desc)
+  if nz(format_char) &gt; "0" then
+     s = "\b " &amp; left(s, format_char) &amp; "\b0 " &amp; mid(s, format_char + 1)
+  end if
+  if not isnull(indent_code) then
+    i = clng(indent_code)
+    s = space(i * 4) &amp; s
+  end if
+  formatdescription = "{" &amp; s &amp; "}"
+end function
+
+function reformatnumber(value, percent_flag)
+  on error resume next
+  v = 0
+  v = trim(value)
+  if v = "" or v = "0" then
+    s = ""
+  elseif percent_flag = "Y" then
+    v = cdbl(v) / 100
+    s = formatpercent(v, 1)
+  else
+    v = cdbl(v)
+    f = 2
+    if v &gt;= 100000 then f = 0
+    s = formatnumber(v, f, -1, 0, -1)
+  end if
+  reformatnumber = s
+end function
+
+function nz(value) 
+  on error resume next
+  if isnull(value) then
+    nz = ""
+  else
+    nz = value
+  end if
+end function
+
+function fixunit(value)
+  if instr(value, "2") &gt; 0 then
+     value = replace(value, "2", "²")
+  end if
+  if instr(value, "3") &gt; 0 then
+     value = replace(value, "3", "³")
+  end if  
+  fixunit = value
+end function
+
+function formatcrewqtyid(crew_qty, crew_id, crew_type_code)
+  on error resume next
+
+  crewqty = 0
+  crewid = ""
+  crewtypecode = ""
+
+  if not isnull(crew_qty) then
+    crewqty = trim(crew_qty)
+  end if
+
+  if not isnull(crew_id) then
+    crewid = trim(crew_id)
+  end if
+
+  if not isnull(crew_type_code) then
+    crewtypecode = trim(crew_type_code)
+  end if
+
+  if crewid = "" then
+    s = ""
+  else
+    if crewtypecode = "C" then
+      s = crewid
+    else 
+      if crewtypecode = "L" then
+        s = formatnumber(crewqty, 0, 0, 0, 0) &amp; " " &amp; crewid
+      else
+        s = "n/a"
+      end if
+    end if
+  end if
+
+  formatcrewqtyid = s
+
+end function</OnOpen>
+    <Groups>
+      <Group>
+        <Name>Group 1</Name>
+        <GroupBy>Level1_ID</GroupBy>
+        <Sort>1</Sort>
+      </Group>
+      <Group>
+        <Name>Group 2</Name>
+        <GroupBy>Level2_ID</GroupBy>
+        <Sort>1</Sort>
+      </Group>
+      <Group>
+        <Name>Group 3</Name>
+        <GroupBy>Level3_ID</GroupBy>
+        <Sort>1</Sort>
+      </Group>
+    </Groups>
+    <Sections>
+      <Section>
+        <Name>Detail</Name>
+        <Height>300</Height>
+        <OnPrint>Line100.Visible = (txt_row_count mod 2 = 0)
+sTemp = Left(table_ref, 1)
+txtRefID.Text = sTemp
+txtRefID.Visible = (sTemp = "R")
+txtGraphicRef.Visible = (nz(Graphic_Ref) &gt; " ")</OnPrint>
+      </Section>
+      <Section>
+        <Name>Header</Name>
+        <Type>1</Type>
+      </Section>
+      <Section>
+        <Name>Footer</Name>
+        <Type>2</Type>
+        <Visible>0</Visible>
+      </Section>
+      <Section>
+        <Name>Page Header</Name>
+        <Type>3</Type>
+      </Section>
+      <Section>
+        <Name>Page Footer</Name>
+        <Type>4</Type>
+        <Height>765</Height>
+      </Section>
+      <Section>
+        <Name>Group 0 Header</Name>
+        <Type>5</Type>
+        <Height>1275</Height>
+      </Section>
+      <Section>
+        <Name>Group 0 Footer</Name>
+        <Type>6</Type>
+        <Height>60</Height>
+        <ForcePageBreak>2</ForcePageBreak>
+      </Section>
+      <Section>
+        <Name>Group 1 Header</Name>
+        <Type>7</Type>
+        <Height>915</Height>
+        <Repeat>-1</Repeat>
+        <OnFormat>PageSubHeader.Visible = (Page &gt; 1)</OnFormat>
+      </Section>
+      <Section>
+        <Name>Group 1 Footer</Name>
+        <Type>8</Type>
+        <Height>315</Height>
+      </Section>
+      <Section>
+        <Name>Group 2 Header</Name>
+        <Type>9</Type>
+        <Height>600</Height>
+      </Section>
+      <Section>
+        <Name>Group 2 Footer</Name>
+        <Type>10</Type>
+        <Height>40</Height>
+      </Section>
+    </Sections>
+    <Fields>
+      <Field>
+        <Name>Line1</Name>
+        <Section>0</Section>
+        <Left>4860</Left>
+        <Height>300</Height>
+        <BorderStyle>1</BorderStyle>
+        <LineWidth>50</LineWidth>
+        <LineSlant>1</LineSlant>
+        <ZOrder>-4</ZOrder>
+      </Field>
+      <Field>
+        <Name>Line2</Name>
+        <Section>0</Section>
+        <Left>360</Left>
+        <Height>300</Height>
+        <BorderStyle>1</BorderStyle>
+        <LineWidth>50</LineWidth>
+        <LineSlant>1</LineSlant>
+        <ZOrder>-3</ZOrder>
+      </Field>
+      <Field>
+        <Name>unit_cost_idCtl1</Name>
+        <Section>0</Section>
+        <Text>=Mid(unit_cost_id,7,2)</Text>
+        <Calculated>-1</Calculated>
+        <Width>375</Width>
+        <Height>300</Height>
+        <Align>1</Align>
+        <HideDuplicates>-1</HideDuplicates>
+        <Font>
+          <Name>Arial Narrow</Name>
+          <Size>8.25</Size>
+          <Bold>-1</Bold>
+        </Font>
+      </Field>
+      <Field>
+        <Name>unit_cost_idCtl</Name>
+        <Section>0</Section>
+        <Text>=Right(unit_cost_id,4)</Text>
+        <Calculated>-1</Calculated>
+        <Left>360</Left>
+        <Width>465</Width>
+        <Height>300</Height>
+        <Align>1</Align>
+        <Font>
+          <Name>Arial Narrow</Name>
+          <Size>8.25</Size>
+        </Font>
+      </Field>
+      <Field>
+        <Name>Line14</Name>
+        <Section>0</Section>
+        <Left>810</Left>
+        <Height>300</Height>
+        <BorderStyle>1</BorderStyle>
+        <LineSlant>2</LineSlant>
+      </Field>
+      <Field>
+        <Name>book_descCtl</Name>
+        <Section>0</Section>
+        <Text>=formatdescription(metric_book_desc,indent_code,format_characters)</Text>
+        <Calculated>-1</Calculated>
+        <RTF>-1</RTF>
+        <Left>814</Left>
+        <Width>4065</Width>
+        <Height>300</Height>
+        <Align>0</Align>
+        <MarginTop>40</MarginTop>
+        <Font>
+          <Name>Arial Narrow</Name>
+          <Size>8.25</Size>
+        </Font>
+      </Field>
+      <Field>
+        <Name>crew_idCtl</Name>
+        <Section>0</Section>
+        <Text>=formatcrewqtyid(crew_qty, crew_id, crew_type_code)</Text>
+        <Calculated>-1</Calculated>
+        <Left>4867</Left>
+        <Width>465</Width>
+        <Height>300</Height>
+        <Align>1</Align>
+        <Font>
+          <Name>Arial Narrow</Name>
+          <Size>6</Size>
+        </Font>
+      </Field>
+      <Field>
+        <Name>Line8</Name>
+        <Section>0</Section>
+        <Left>5310</Left>
+        <Height>300</Height>
+        <BorderStyle>1</BorderStyle>
+        <LineSlant>2</LineSlant>
+      </Field>
+      <Field>
+        <Name>daily_outputCtl</Name>
+        <Section>0</Section>
+        <Text>metric_daily_output</Text>
+        <Calculated>-1</Calculated>
+        <Format>#.##</Format>
+        <Left>5317</Left>
+        <Width>540</Width>
+        <Height>300</Height>
+        <Align>1</Align>
+        <Font>
+          <Name>Arial Narrow</Name>
+          <Size>8.25</Size>
+        </Font>
+      </Field>
+      <Field>
+        <Name>Line9</Name>
+        <Section>0</Section>
+        <Left>5857</Left>
+        <Height>300</Height>
+        <BorderStyle>1</BorderStyle>
+        <LineSlant>2</LineSlant>
+      </Field>
+      <Field>
+        <Name>std_labor_hourCtl</Name>
+        <Section>0</Section>
+        <Text>metric_labor_hour</Text>
+        <Calculated>-1</Calculated>
+        <Format>#,##0.000</Format>
+        <Left>5857</Left>
+        <Width>555</Width>
+        <Height>300</Height>
+        <Align>1</Align>
+        <Font>
+          <Name>Arial Narrow</Name>
+          <Size>8.25</Size>
+        </Font>
+      </Field>
+      <Field>
+        <Name>unitCtl</Name>
+        <Section>0</Section>
+        <Text>=fixunit(Trim(metric_unit))</Text>
+        <Calculated>-1</Calculated>
+        <Left>6391</Left>
+        <Width>555</Width>
+        <Height>300</Height>
+        <Align>1</Align>
+        <Font>
+          <Name>Arial Narrow</Name>
+          <Size>8.25</Size>
+        </Font>
+      </Field>
+      <Field>
+        <Name>Line10</Name>
+        <Section>0</Section>
+        <Left>6930</Left>
+        <Height>300</Height>
+        <BorderStyle>1</BorderStyle>
+        <LineSlant>2</LineSlant>
+      </Field>
+      <Field>
+        <Name>txt_mat_cost</Name>
+        <Section>0</Section>
+        <Text>=reformatnumber(std_mat_cost,percent_flag)</Text>
+        <Calculated>-1</Calculated>
+        <Left>6930</Left>
+        <Width>735</Width>
+        <Height>300</Height>
+        <Align>2</Align>
+        <MarginRight>30</MarginRight>
+        <Font>
+          <Name>Arial Narrow</Name>
+          <Size>8.25</Size>
+        </Font>
+      </Field>
+      <Field>
+        <Name>Line11</Name>
+        <Section>0</Section>
+        <Left>7650</Left>
+        <Height>300</Height>
+        <BorderStyle>1</BorderStyle>
+        <LineSlant>2</LineSlant>
+      </Field>
+      <Field>
+        <Name>txt_labor_cost</Name>
+        <Section>0</Section>
+        <Text>=reformatnumber(std_labor_cost,percent_flag)</Text>
+        <Calculated>-1</Calculated>
+        <Left>7654</Left>
+        <Width>735</Width>
+        <Height>300</Height>
+        <Align>2</Align>
+        <MarginRight>30</MarginRight>
+        <Font>
+          <Name>Arial Narrow</Name>
+          <Size>8.25</Size>
+        </Font>
+      </Field>
+      <Field>
+        <Name>txt_equip_cost</Name>
+        <Section>0</Section>
+        <Text>=reformatnumber(std_equip_cost,percent_flag)</Text>
+        <Calculated>-1</Calculated>
+        <Left>8377</Left>
+        <Width>735</Width>
+        <Height>300</Height>
+        <Align>2</Align>
+        <MarginRight>30</MarginRight>
+        <Font>
+          <Name>Arial Narrow</Name>
+          <Size>8.25</Size>
+        </Font>
+      </Field>
+      <Field>
+        <Name>Line12</Name>
+        <Section>0</Section>
+        <Left>8377</Left>
+        <Height>300</Height>
+        <BorderStyle>1</BorderStyle>
+        <LineSlant>2</LineSlant>
+      </Field>
+      <Field>
+        <Name>txt_total_cost</Name>
+        <Section>0</Section>
+        <Text>=reformatnumber(std_total_cost,percent_flag)</Text>
+        <Calculated>-1</Calculated>
+        <Left>9097</Left>
+        <Width>825</Width>
+        <Height>300</Height>
+        <Align>2</Align>
+        <MarginRight>60</MarginRight>
+        <Font>
+          <Name>Arial Narrow</Name>
+          <Size>8.25</Size>
+        </Font>
+      </Field>
+      <Field>
+        <Name>Line13</Name>
+        <Section>0</Section>
+        <Left>9097</Left>
+        <Height>300</Height>
+        <BorderStyle>1</BorderStyle>
+        <LineSlant>2</LineSlant>
+      </Field>
+      <Field>
+        <Name>txt_total_cost_op</Name>
+        <Section>0</Section>
+        <Text>=reformatnumber(std_total_cost_op,percent_flag)</Text>
+        <Calculated>-1</Calculated>
+        <Left>9899</Left>
+        <Width>825</Width>
+        <Height>300</Height>
+        <Align>2</Align>
+        <MarginRight>30</MarginRight>
+        <Font>
+          <Name>Arial Narrow</Name>
+          <Size>8.25</Size>
+        </Font>
+      </Field>
+      <Field>
+        <Name>unit_cost_idCtl2</Name>
+        <Section>0</Section>
+        <Text>=Mid(unit_cost_id,7,2)</Text>
+        <Calculated>-1</Calculated>
+        <Left>10710</Left>
+        <Width>375</Width>
+        <Height>300</Height>
+        <Align>1</Align>
+        <HideDuplicates>-1</HideDuplicates>
+        <Font>
+          <Name>Arial Narrow</Name>
+          <Size>8.25</Size>
+          <Bold>-1</Bold>
+        </Font>
+      </Field>
+      <Field>
+        <Name>Line15</Name>
+        <Section>0</Section>
+        <Left>10709</Left>
+        <Height>300</Height>
+        <BorderStyle>1</BorderStyle>
+        <LineSlant>2</LineSlant>
+      </Field>
+      <Field>
+        <Name>txt_row_count</Name>
+        <Section>0</Section>
+        <Text>=1</Text>
+        <Calculated>-1</Calculated>
+        <Left>10980</Left>
+        <Width>195</Width>
+        <Height>300</Height>
+        <Align>2</Align>
+        <MarginRight>30</MarginRight>
+        <Visible>0</Visible>
+        <RunningSum>1</RunningSum>
+        <Font>
+          <Name>Arial Narrow</Name>
+          <Size>6</Size>
+        </Font>
+      </Field>
+      <Field>
+        <Name>Line100</Name>
+        <Section>0</Section>
+        <Left>360</Left>
+        <Top>270</Top>
+        <Width>10365</Width>
+        <BorderStyle>1</BorderStyle>
+        <LineSlant>2</LineSlant>
+      </Field>
+      <Field>
+        <Name>Line</Name>
+        <Section>0</Section>
+        <Left>6390</Left>
+        <Height>300</Height>
+        <BorderStyle>1</BorderStyle>
+        <LineWidth>50</LineWidth>
+        <LineSlant>1</LineSlant>
+        <ZOrder>4</ZOrder>
+      </Field>
+      <Field>
+        <Name>Line3</Name>
+        <Section>0</Section>
+        <Left>9900</Left>
+        <Height>300</Height>
+        <BorderStyle>1</BorderStyle>
+        <LineWidth>50</LineWidth>
+        <LineSlant>1</LineSlant>
+        <ZOrder>7</ZOrder>
+      </Field>
+      <Field>
+        <Name>FooterLeft</Name>
+        <Section>4</Section>
+        <Text>Now()</Text>
+        <Calculated>-1</Calculated>
+        <Top>450</Top>
+        <Width>4680</Width>
+        <Height>300</Height>
+        <Align>0</Align>
+        <Font>
+          <Size>8.25</Size>
+        </Font>
+      </Field>
+      <Field>
+        <Name>FooterRight</Name>
+        <Section>4</Section>
+        <Text>"Page " &amp; [Page] &amp; " of " &amp; [Pages]</Text>
+        <Calculated>-1</Calculated>
+        <Left>6300</Left>
+        <Top>450</Top>
+        <Width>4680</Width>
+        <Height>300</Height>
+        <Align>2</Align>
+        <Font>
+          <Size>8.25</Size>
+        </Font>
+      </Field>
+      <Field>
+        <Name>Label</Name>
+        <Section>5</Section>
+        <Text>="Division " &amp; Level1_ID</Text>
+        <Calculated>-1</Calculated>
+        <Width>10995</Width>
+        <Height>465</Height>
+        <Font>
+          <Name>Times New Roman</Name>
+          <Size>18</Size>
+          <Bold>-1</Bold>
+          <Italic>-1</Italic>
+        </Font>
+      </Field>
+      <Field>
+        <Name>Label2</Name>
+        <Section>5</Section>
+        <Text>=Level1_Desc</Text>
+        <Calculated>-1</Calculated>
+        <Top>390</Top>
+        <Width>10995</Width>
+        <Height>465</Height>
+        <Font>
+          <Name>Times New Roman</Name>
+          <Size>18</Size>
+          <Bold>-1</Bold>
+          <Italic>-1</Italic>
+        </Font>
+      </Field>
+      <Field>
+        <Name>Line7</Name>
+        <Section>7</Section>
+        <Left>360</Left>
+        <Top>360</Top>
+        <Height>555</Height>
+        <BorderStyle>1</BorderStyle>
+        <LineWidth>50</LineWidth>
+        <LineSlant>1</LineSlant>
+        <ZOrder>-3</ZOrder>
+      </Field>
+      <Field>
+        <Name>PageSubHeader</Name>
+        <Section>7</Section>
+        <Text>=FORMAT(Level3_ID,"@@ @@ @@") &amp; " | " &amp; Level3_Desc</Text>
+        <Calculated>-1</Calculated>
+        <Left>360</Left>
+        <Top>360</Top>
+        <Width>4335</Width>
+        <Height>555</Height>
+        <Align>6</Align>
+        <MarginLeft>60</MarginLeft>
+        <Visible>0</Visible>
+        <HideDuplicates>-1</HideDuplicates>
+        <Font>
+          <Size>9.75</Size>
+          <Bold>-1</Bold>
+        </Font>
+        <ZOrder>-2</ZOrder>
+      </Field>
+      <Field>
+        <Name>crew_idLbl</Name>
+        <Section>7</Section>
+        <Text>CREW</Text>
+        <Left>4852</Left>
+        <Top>390</Top>
+        <Width>465</Width>
+        <Height>465</Height>
+        <Align>4</Align>
+        <MarginLeft>30</MarginLeft>
+        <WordWrap>0</WordWrap>
+        <Font>
+          <Name>Arial Narrow</Name>
+          <Size>8.25</Size>
+          <Bold>-1</Bold>
+        </Font>
+      </Field>
+      <Field>
+        <Name>daily_outputLbl</Name>
+        <Section>7</Section>
+        <Text>DAILY OUTPUT</Text>
+        <Left>5227</Left>
+        <Top>390</Top>
+        <Width>735</Width>
+        <Height>465</Height>
+        <Align>4</Align>
+        <Font>
+          <Name>Arial Narrow</Name>
+          <Size>8.25</Size>
+          <Bold>-1</Bold>
+        </Font>
+      </Field>
+      <Field>
+        <Name>std_labor_hourLbl</Name>
+        <Section>7</Section>
+        <Text>LABOR HOURS</Text>
+        <Left>5857</Left>
+        <Top>390</Top>
+        <Width>555</Width>
+        <Height>465</Height>
+        <Align>4</Align>
+        <Font>
+          <Name>Arial Narrow</Name>
+          <Size>8.25</Size>
+          <Bold>-1</Bold>
+        </Font>
+      </Field>
+      <Field>
+        <Name>unitLbl</Name>
+        <Section>7</Section>
+        <Text>UNIT</Text>
+        <Left>6391</Left>
+        <Top>390</Top>
+        <Width>555</Width>
+        <Height>465</Height>
+        <Align>4</Align>
+        <WordWrap>0</WordWrap>
+        <Font>
+          <Name>Arial Narrow</Name>
+          <Size>8.25</Size>
+          <Bold>-1</Bold>
+        </Font>
+      </Field>
+      <Field>
+        <Name>std_total_cost_opLbl</Name>
+        <Section>7</Section>
+        <Text>TOTAL INCL O&amp;P</Text>
+        <Left>9899</Left>
+        <Top>360</Top>
+        <Width>825</Width>
+        <Height>465</Height>
+        <Align>4</Align>
+        <MarginLeft>30</MarginLeft>
+        <Font>
+          <Name>Arial Narrow</Name>
+          <Size>8.25</Size>
+          <Bold>-1</Bold>
+        </Font>
+      </Field>
+      <Field>
+        <Name>PageHeader</Name>
+        <Section>7</Section>
+        <Text>=FORMAT(Level2_ID,"@@ @@") &amp; " | " &amp; Level2_Desc</Text>
+        <Calculated>-1</Calculated>
+        <Width>10995</Width>
+        <Height>375</Height>
+        <Align>0</Align>
+        <BackStyle>1</BackStyle>
+        <BackColor>0</BackColor>
+        <ForeColor>16777215</ForeColor>
+        <BorderStyle>1</BorderStyle>
+        <MarginLeft>50</MarginLeft>
+        <HideDuplicates>-1</HideDuplicates>
+        <WordWrap>0</WordWrap>
+        <Font>
+          <Name>Arial Black</Name>
+          <Size>12</Size>
+          <Bold>-1</Bold>
+        </Font>
+        <ZOrder>18</ZOrder>
+      </Field>
+      <Field>
+        <Name>std_mat_costLbl</Name>
+        <Section>7</Section>
+        <Text>MAT.</Text>
+        <Left>6930</Left>
+        <Top>570</Top>
+        <Width>735</Width>
+        <Height>285</Height>
+        <Align>4</Align>
+        <Font>
+          <Name>Arial Narrow</Name>
+          <Size>8.25</Size>
+          <Bold>-1</Bold>
+        </Font>
+      </Field>
+      <Field>
+        <Name>std_labor_costLbl</Name>
+        <Section>7</Section>
+        <Text>LABOR</Text>
+        <Left>7650</Left>
+        <Top>570</Top>
+        <Width>735</Width>
+        <Height>285</Height>
+        <Align>4</Align>
+        <Font>
+          <Name>Arial Narrow</Name>
+          <Size>8.25</Size>
+          <Bold>-1</Bold>
+        </Font>
+      </Field>
+      <Field>
+        <Name>std_equip_costLbl</Name>
+        <Section>7</Section>
+        <Text>EQUIP.</Text>
+        <Left>8377</Left>
+        <Top>570</Top>
+        <Width>735</Width>
+        <Height>285</Height>
+        <Align>4</Align>
+        <Font>
+          <Name>Arial Narrow</Name>
+          <Size>8.25</Size>
+          <Bold>-1</Bold>
+        </Font>
+      </Field>
+      <Field>
+        <Name>std_total_costLbl</Name>
+        <Section>7</Section>
+        <Text>TOTAL</Text>
+        <Left>9097</Left>
+        <Top>570</Top>
+        <Width>825</Width>
+        <Height>285</Height>
+        <Align>4</Align>
+        <Font>
+          <Name>Arial Narrow</Name>
+          <Size>8.25</Size>
+          <Bold>-1</Bold>
+        </Font>
+      </Field>
+      <Field>
+        <Name>Line5</Name>
+        <Section>7</Section>
+        <Left>6390</Left>
+        <Top>360</Top>
+        <Height>555</Height>
+        <BorderStyle>1</BorderStyle>
+        <LineWidth>50</LineWidth>
+        <LineSlant>1</LineSlant>
+        <ZOrder>9</ZOrder>
+      </Field>
+      <Field>
+        <Name>Line4</Name>
+        <Section>7</Section>
+        <Left>4860</Left>
+        <Top>360</Top>
+        <Height>555</Height>
+        <BackStyle>1</BackStyle>
+        <BorderStyle>1</BorderStyle>
+        <LineWidth>50</LineWidth>
+        <LineSlant>1</LineSlant>
+        <ZOrder>11</ZOrder>
+      </Field>
+      <Field>
+        <Name>Label1</Name>
+        <Section>7</Section>
+        <Text>STANDARD BARE COSTS</Text>
+        <Left>6930</Left>
+        <Top>375</Top>
+        <Width>2970</Width>
+        <Height>225</Height>
+        <Align>4</Align>
+        <Font>
+          <Name>Arial Narrow</Name>
+          <Size>8.25</Size>
+          <Bold>-1</Bold>
+        </Font>
+        <ZOrder>16</ZOrder>
+      </Field>
+      <Field>
+        <Name>Line6</Name>
+        <Section>7</Section>
+        <Left>9900</Left>
+        <Top>360</Top>
+        <Height>555</Height>
+        <BorderStyle>1</BorderStyle>
+        <LineWidth>50</LineWidth>
+        <LineSlant>1</LineSlant>
+        <ZOrder>17</ZOrder>
+      </Field>
+      <Field>
+        <Name>PageSubHeader1</Name>
+        <Section>9</Section>
+        <Text>=FORMAT(Level3_ID,"@@ @@ @@") &amp; " | " &amp; Level3_Desc</Text>
+        <Calculated>-1</Calculated>
+        <Left>360</Left>
+        <Width>9555</Width>
+        <Height>600</Height>
+        <Align>6</Align>
+        <MarginLeft>60</MarginLeft>
+        <HideDuplicates>-1</HideDuplicates>
+        <Font>
+          <Name>Arial Black</Name>
+          <Size>12</Size>
+          <Bold>-1</Bold>
+        </Font>
+        <ZOrder>-2</ZOrder>
+      </Field>
+      <Field>
+        <Name>Line16</Name>
+        <Section>9</Section>
+        <Left>360</Left>
+        <Height>600</Height>
+        <BorderStyle>1</BorderStyle>
+        <LineWidth>50</LineWidth>
+        <LineSlant>1</LineSlant>
+        <ZOrder>19</ZOrder>
+      </Field>
+      <Field>
+        <Name>Line17</Name>
+        <Section>9</Section>
+        <Left>9900</Left>
+        <Height>600</Height>
+        <BorderStyle>1</BorderStyle>
+        <LineWidth>50</LineWidth>
+        <LineSlant>1</LineSlant>
+        <ZOrder>19</ZOrder>
+      </Field>
+      <Field>
+        <Name>Line18</Name>
+        <Section>7</Section>
+        <Left>5310</Left>
+        <Top>360</Top>
+        <Height>555</Height>
+        <BorderStyle>1</BorderStyle>
+        <LineSlant>2</LineSlant>
+      </Field>
+      <Field>
+        <Name>Line19</Name>
+        <Section>7</Section>
+        <Left>5857</Left>
+        <Top>360</Top>
+        <Height>555</Height>
+        <BorderStyle>1</BorderStyle>
+        <LineSlant>2</LineSlant>
+      </Field>
+      <Field>
+        <Name>Line20</Name>
+        <Section>7</Section>
+        <Left>6930</Left>
+        <Top>360</Top>
+        <Height>555</Height>
+        <BorderStyle>1</BorderStyle>
+        <LineSlant>2</LineSlant>
+      </Field>
+      <Field>
+        <Name>Line21</Name>
+        <Section>7</Section>
+        <Left>10709</Left>
+        <Top>360</Top>
+        <Height>555</Height>
+        <BorderStyle>1</BorderStyle>
+        <LineSlant>2</LineSlant>
+      </Field>
+      <Field>
+        <Name>Line22</Name>
+        <Section>7</Section>
+        <Top>900</Top>
+        <Width>10995</Width>
+        <BorderStyle>1</BorderStyle>
+        <LineWidth>50</LineWidth>
+        <LineSlant>2</LineSlant>
+      </Field>
+      <Field>
+        <Name>Line23</Name>
+        <Section>9</Section>
+        <Left>10709</Left>
+        <Height>600</Height>
+        <BorderStyle>1</BorderStyle>
+        <LineSlant>2</LineSlant>
+      </Field>
+      <Field>
+        <Name>Line24</Name>
+        <Section>9</Section>
+        <Top>600</Top>
+        <Width>10995</Width>
+        <BorderStyle>1</BorderStyle>
+        <LineWidth>50</LineWidth>
+        <LineSlant>2</LineSlant>
+      </Field>
+      <Field>
+        <Name>Line25</Name>
+        <Section>10</Section>
+        <Width>10995</Width>
+        <BorderStyle>1</BorderStyle>
+        <LineWidth>50</LineWidth>
+        <LineSlant>2</LineSlant>
+      </Field>
+      <Field>
+        <Name>FooterLeft1</Name>
+        <Section>4</Section>
+        <Text>Output_Desc</Text>
+        <Calculated>-1</Calculated>
+        <Left>3240</Left>
+        <Top>450</Top>
+        <Width>4680</Width>
+        <Height>300</Height>
+        <Align>1</Align>
+        <Font>
+          <Size>8.25</Size>
+        </Font>
+      </Field>
+      <Field>
+        <Name>txtRefID</Name>
+        <Section>0</Section>
+        <Text>R</Text>
+        <Format>@</Format>
+        <Left>4600</Left>
+        <Top>40</Top>
+        <Width>210</Width>
+        <Height>210</Height>
+        <Align>1</Align>
+        <BackStyle>1</BackStyle>
+        <BorderStyle>1</BorderStyle>
+        <LineWidth>24</LineWidth>
+        <Font>
+          <Name>Arial Narrow</Name>
+          <Size>8.25</Size>
+          <Bold>-1</Bold>
+        </Font>
+      </Field>
+      <Field>
+        <Name>txtGraphicRef</Name>
+        <Section>0</Section>
+        <Text>=nz(Graphic_Ref) &gt; " "</Text>
+        <Calculated>-1</Calculated>
+        <CheckBox>3</CheckBox>
+        <Left>4590</Left>
+        <Top>45</Top>
+        <Width>195</Width>
+        <Height>195</Height>
+        <Align>2</Align>
+        <Font>
+          <Name>Wingdings</Name>
+        </Font>
+      </Field>
+    </Fields>
+  </Report>
+
+  <!-- Report *** MF-2004 Standard Book Format *** -->
+  <Report>
+    <Name>MF-2004 Standard Book Format</Name>
+    <DataSource>
+      <ConnectionString>Provider=SQLNCLI.1;Integrated Security=SSPI;Persist Security Info=False;Initial Catalog=ccddev;Data Source=binnorsqld002\sql2k5</ConnectionString>
+      <RecordSource>exec usp_select_book_format 
+@start_book_unit_cost_id = '047100000000', @end_book_unit_cost_id = '047199999999', @master_format_version = '2004', @book_output_id = 1</RecordSource>
+    </DataSource>
+    <Layout>
+      <Width>11175</Width>
+      <MarginLeft>720</MarginLeft>
+      <MarginTop>720</MarginTop>
+      <MarginRight>720</MarginRight>
+      <MarginBottom>720</MarginBottom>
+      <Orientation>1</Orientation>
+    </Layout>
+    <OnOpen>function formatdescription(book_desc,indent_code,format_char)
+  on error resume next
+  s = Trim(book_desc)
+  if nz(format_char) &gt; "0" then
+     s = "\b " &amp; left(s, format_char) &amp; "\b0 " &amp; mid(s, format_char + 1)
+  end if
+  if not isnull(indent_code) then
+    i = clng(indent_code)
+    s = space(i * 4) &amp; s
+  end if
+  formatdescription = "{" &amp; s &amp; "}"
+end function
+
+function reformatnumber(value, percent_flag)
+  on error resume next
+  v = 0
+  v = trim(value)
+  if v = "" or v = "0" then
+    s = ""
+  elseif percent_flag = "Y" then
+    v = cdbl(v) / 100
+    s = formatpercent(v, 1)
+  else
+    v = cdbl(v)
+    f = 2
+    if v &gt;= 100000 then f = 0
+    s = formatnumber(v, f, -1, 0, -1)
+  end if
+  reformatnumber = s
+end function
+
+function nz(value) 
+  on error resume next
+  if isnull(value) then
+    nz = ""
+  else
+    nz = value
+  end if
+end function
+
+function formatcrewqtyid(crew_qty, crew_id, crew_type_code)
+  on error resume next
+
+  crewqty = 0
+  crewid = ""
+  crewtypecode = ""
+
+  if not isnull(crew_qty) then
+    crewqty = trim(crew_qty)
+  end if
+
+  if not isnull(crew_id) then
+    crewid = trim(crew_id)
+  end if
+
+  if not isnull(crew_type_code) then
+    crewtypecode = trim(crew_type_code)
+  end if
+
+  if crewid = "" then
+    s = ""
+  else
+    if crewtypecode = "C" then
+      s = crewid
+    else 
+      if crewtypecode = "L" then
+        s = formatnumber(crewqty, 0, 0, 0, 0) &amp; " " &amp; crewid
+      else
+        s = "n/a"
+      end if
+    end if
+  end if
+
+  formatcrewqtyid = s
+
+end function</OnOpen>
+    <Groups>
+      <Group>
+        <Name>Group 1</Name>
+        <GroupBy>Level1_ID</GroupBy>
+        <Sort>1</Sort>
+      </Group>
+      <Group>
+        <Name>Group 2</Name>
+        <GroupBy>Level2_ID</GroupBy>
+        <Sort>1</Sort>
+      </Group>
+      <Group>
+        <Name>Group 3</Name>
+        <GroupBy>Level3_ID</GroupBy>
+        <Sort>1</Sort>
+      </Group>
+    </Groups>
+    <Sections>
+      <Section>
+        <Name>Detail</Name>
+        <Height>300</Height>
+        <OnPrint>Line100.Visible = (txt_row_count mod 2 = 0)
+sTemp = Left(table_ref, 1)
+txtRefID.Text = sTemp
+txtRefID.Visible = (sTemp = "R")
+txtGraphicRef.Visible = (nz(Graphic_Ref) &gt; " ")</OnPrint>
+      </Section>
+      <Section>
+        <Name>Header</Name>
+        <Type>1</Type>
+      </Section>
+      <Section>
+        <Name>Footer</Name>
+        <Type>2</Type>
+        <Visible>0</Visible>
+      </Section>
+      <Section>
+        <Name>Page Header</Name>
+        <Type>3</Type>
+      </Section>
+      <Section>
+        <Name>Page Footer</Name>
+        <Type>4</Type>
+        <Height>765</Height>
+      </Section>
+      <Section>
+        <Name>Group 0 Header</Name>
+        <Type>5</Type>
+        <Height>1275</Height>
+      </Section>
+      <Section>
+        <Name>Group 0 Footer</Name>
+        <Type>6</Type>
+        <Height>60</Height>
+        <ForcePageBreak>2</ForcePageBreak>
+      </Section>
+      <Section>
+        <Name>Group 1 Header</Name>
+        <Type>7</Type>
+        <Height>915</Height>
+        <Repeat>-1</Repeat>
+        <OnFormat>PageSubHeader.Visible = (Page &gt; 1)</OnFormat>
+      </Section>
+      <Section>
+        <Name>Group 1 Footer</Name>
+        <Type>8</Type>
+        <Height>315</Height>
+      </Section>
+      <Section>
+        <Name>Group 2 Header</Name>
+        <Type>9</Type>
+        <Height>600</Height>
+      </Section>
+      <Section>
+        <Name>Group 2 Footer</Name>
+        <Type>10</Type>
+        <Height>40</Height>
+      </Section>
+    </Sections>
+    <Fields>
+      <Field>
+        <Name>Line1</Name>
+        <Section>0</Section>
+        <Left>4860</Left>
+        <Height>300</Height>
+        <BorderStyle>1</BorderStyle>
+        <LineWidth>50</LineWidth>
+        <LineSlant>1</LineSlant>
+        <ZOrder>-4</ZOrder>
+      </Field>
+      <Field>
+        <Name>Line2</Name>
+        <Section>0</Section>
+        <Left>360</Left>
+        <Height>300</Height>
+        <BorderStyle>1</BorderStyle>
+        <LineWidth>50</LineWidth>
+        <LineSlant>1</LineSlant>
+        <ZOrder>-3</ZOrder>
+      </Field>
+      <Field>
+        <Name>unit_cost_idCtl1</Name>
+        <Section>0</Section>
+        <Text>=Mid(unit_cost_id,7,2)</Text>
+        <Calculated>-1</Calculated>
+        <Width>375</Width>
+        <Height>300</Height>
+        <Align>1</Align>
+        <HideDuplicates>-1</HideDuplicates>
+        <Font>
+          <Name>Arial Narrow</Name>
+          <Size>8.25</Size>
+          <Bold>-1</Bold>
+        </Font>
+      </Field>
+      <Field>
+        <Name>unit_cost_idCtl</Name>
+        <Section>0</Section>
+        <Text>=Right(unit_cost_id,4)</Text>
+        <Calculated>-1</Calculated>
+        <Left>360</Left>
+        <Width>465</Width>
+        <Height>300</Height>
+        <Align>1</Align>
+        <Font>
+          <Name>Arial Narrow</Name>
+          <Size>8.25</Size>
+        </Font>
+      </Field>
+      <Field>
+        <Name>Line14</Name>
+        <Section>0</Section>
+        <Left>810</Left>
+        <Height>300</Height>
+        <BorderStyle>1</BorderStyle>
+        <LineSlant>2</LineSlant>
+      </Field>
+      <Field>
+        <Name>book_descCtl</Name>
+        <Section>0</Section>
+        <Text>=formatdescription(book_desc,indent_code,format_characters)</Text>
+        <Calculated>-1</Calculated>
+        <RTF>-1</RTF>
+        <Left>814</Left>
+        <Width>4065</Width>
+        <Height>300</Height>
+        <Align>0</Align>
+        <MarginTop>40</MarginTop>
+        <Font>
+          <Name>Arial Narrow</Name>
+          <Size>8.25</Size>
+        </Font>
+      </Field>
+      <Field>
+        <Name>crew_idCtl</Name>
+        <Section>0</Section>
+        <Text>=formatcrewqtyid(crew_qty, crew_id, crew_type_code)</Text>
+        <Calculated>-1</Calculated>
+        <Left>4867</Left>
+        <Width>465</Width>
+        <Height>300</Height>
+        <Align>1</Align>
+        <Font>
+          <Name>Arial Narrow</Name>
+          <Size>6</Size>
+        </Font>
+      </Field>
+      <Field>
+        <Name>Line8</Name>
+        <Section>0</Section>
+        <Left>5310</Left>
+        <Height>300</Height>
+        <BorderStyle>1</BorderStyle>
+        <LineSlant>2</LineSlant>
+      </Field>
+      <Field>
+        <Name>daily_outputCtl</Name>
+        <Section>0</Section>
+        <Text>daily_output</Text>
+        <Calculated>-1</Calculated>
+        <Format>#.##</Format>
+        <Left>5317</Left>
+        <Width>540</Width>
+        <Height>300</Height>
+        <Align>1</Align>
+        <Font>
+          <Name>Arial Narrow</Name>
+          <Size>8.25</Size>
+        </Font>
+      </Field>
+      <Field>
+        <Name>Line9</Name>
+        <Section>0</Section>
+        <Left>5857</Left>
+        <Height>300</Height>
+        <BorderStyle>1</BorderStyle>
+        <LineSlant>2</LineSlant>
+      </Field>
+      <Field>
+        <Name>std_labor_hourCtl</Name>
+        <Section>0</Section>
+        <Text>std_labor_hour</Text>
+        <Calculated>-1</Calculated>
+        <Format>#,##0.000</Format>
+        <Left>5857</Left>
+        <Width>555</Width>
+        <Height>300</Height>
+        <Align>1</Align>
+        <Font>
+          <Name>Arial Narrow</Name>
+          <Size>8.25</Size>
+        </Font>
+      </Field>
+      <Field>
+        <Name>unitCtl</Name>
+        <Section>0</Section>
+        <Text>=Trim(unit)</Text>
+        <Calculated>-1</Calculated>
+        <Left>6391</Left>
+        <Width>555</Width>
+        <Height>300</Height>
+        <Align>1</Align>
+        <Font>
+          <Name>Arial Narrow</Name>
+          <Size>8.25</Size>
+        </Font>
+      </Field>
+      <Field>
+        <Name>Line10</Name>
+        <Section>0</Section>
+        <Left>6930</Left>
+        <Height>300</Height>
+        <BorderStyle>1</BorderStyle>
+        <LineSlant>2</LineSlant>
+      </Field>
+      <Field>
+        <Name>txt_mat_cost</Name>
+        <Section>0</Section>
+        <Text>=reformatnumber(res_mat_cost,percent_flag)</Text>
+        <Calculated>-1</Calculated>
+        <Left>6930</Left>
+        <Width>735</Width>
+        <Height>300</Height>
+        <Align>2</Align>
+        <MarginRight>30</MarginRight>
+        <Font>
+          <Name>Arial Narrow</Name>
+          <Size>8.25</Size>
+        </Font>
+      </Field>
+      <Field>
+        <Name>Line11</Name>
+        <Section>0</Section>
+        <Left>7650</Left>
+        <Height>300</Height>
+        <BorderStyle>1</BorderStyle>
+        <LineSlant>2</LineSlant>
+      </Field>
+      <Field>
+        <Name>txt_labor_cost</Name>
+        <Section>0</Section>
+        <Text>=reformatnumber(res_labor_cost,percent_flag)</Text>
+        <Calculated>-1</Calculated>
+        <Left>7654</Left>
+        <Width>735</Width>
+        <Height>300</Height>
+        <Align>2</Align>
+        <MarginRight>30</MarginRight>
+        <Font>
+          <Name>Arial Narrow</Name>
+          <Size>8.25</Size>
+        </Font>
+      </Field>
+      <Field>
+        <Name>txt_equip_cost</Name>
+        <Section>0</Section>
+        <Text>=reformatnumber(res_equip_cost,percent_flag)</Text>
+        <Calculated>-1</Calculated>
+        <Left>8377</Left>
+        <Width>735</Width>
+        <Height>300</Height>
+        <Align>2</Align>
+        <MarginRight>30</MarginRight>
+        <Font>
+          <Name>Arial Narrow</Name>
+          <Size>8.25</Size>
+        </Font>
+      </Field>
+      <Field>
+        <Name>Line12</Name>
+        <Section>0</Section>
+        <Left>8377</Left>
+        <Height>300</Height>
+        <BorderStyle>1</BorderStyle>
+        <LineSlant>2</LineSlant>
+      </Field>
+      <Field>
+        <Name>txt_total_cost</Name>
+        <Section>0</Section>
+        <Text>=reformatnumber(res_total_cost,percent_flag)</Text>
+        <Calculated>-1</Calculated>
+        <Left>9097</Left>
+        <Width>825</Width>
+        <Height>300</Height>
+        <Align>2</Align>
+        <MarginRight>60</MarginRight>
+        <Font>
+          <Name>Arial Narrow</Name>
+          <Size>8.25</Size>
+        </Font>
+      </Field>
+      <Field>
+        <Name>Line13</Name>
+        <Section>0</Section>
+        <Left>9097</Left>
+        <Height>300</Height>
+        <BorderStyle>1</BorderStyle>
+        <LineSlant>2</LineSlant>
+      </Field>
+      <Field>
+        <Name>txt_total_cost_op</Name>
+        <Section>0</Section>
+        <Text>=reformatnumber(res_total_cost_op,percent_flag)</Text>
+        <Calculated>-1</Calculated>
+        <Left>9899</Left>
+        <Width>825</Width>
+        <Height>300</Height>
+        <Align>2</Align>
+        <MarginRight>30</MarginRight>
+        <Font>
+          <Name>Arial Narrow</Name>
+          <Size>8.25</Size>
+        </Font>
+      </Field>
+      <Field>
+        <Name>unit_cost_idCtl2</Name>
+        <Section>0</Section>
+        <Text>=Mid(unit_cost_id,7,2)</Text>
+        <Calculated>-1</Calculated>
+        <Left>10710</Left>
+        <Width>375</Width>
+        <Height>300</Height>
+        <Align>1</Align>
+        <HideDuplicates>-1</HideDuplicates>
+        <Font>
+          <Name>Arial Narrow</Name>
+          <Size>8.25</Size>
+          <Bold>-1</Bold>
+        </Font>
+      </Field>
+      <Field>
+        <Name>Line15</Name>
+        <Section>0</Section>
+        <Left>10709</Left>
+        <Height>300</Height>
+        <BorderStyle>1</BorderStyle>
+        <LineSlant>2</LineSlant>
+      </Field>
+      <Field>
+        <Name>txt_row_count</Name>
+        <Section>0</Section>
+        <Text>=1</Text>
+        <Calculated>-1</Calculated>
+        <Left>10980</Left>
+        <Width>195</Width>
+        <Height>300</Height>
+        <Align>2</Align>
+        <MarginRight>30</MarginRight>
+        <Visible>0</Visible>
+        <RunningSum>1</RunningSum>
+        <Font>
+          <Name>Arial Narrow</Name>
+          <Size>6</Size>
+        </Font>
+      </Field>
+      <Field>
+        <Name>Line100</Name>
+        <Section>0</Section>
+        <Left>360</Left>
+        <Top>270</Top>
+        <Width>10365</Width>
+        <BorderStyle>1</BorderStyle>
+        <LineSlant>2</LineSlant>
+      </Field>
+      <Field>
+        <Name>Line</Name>
+        <Section>0</Section>
+        <Left>6390</Left>
+        <Height>300</Height>
+        <BorderStyle>1</BorderStyle>
+        <LineWidth>50</LineWidth>
+        <LineSlant>1</LineSlant>
+        <ZOrder>4</ZOrder>
+      </Field>
+      <Field>
+        <Name>Line3</Name>
+        <Section>0</Section>
+        <Left>9900</Left>
+        <Height>300</Height>
+        <BorderStyle>1</BorderStyle>
+        <LineWidth>50</LineWidth>
+        <LineSlant>1</LineSlant>
+        <ZOrder>7</ZOrder>
+      </Field>
+      <Field>
+        <Name>FooterLeft</Name>
+        <Section>4</Section>
+        <Text>Now()</Text>
+        <Calculated>-1</Calculated>
+        <Top>450</Top>
+        <Width>4680</Width>
+        <Height>300</Height>
+        <Align>0</Align>
+        <Font>
+          <Size>8.25</Size>
+        </Font>
+      </Field>
+      <Field>
+        <Name>FooterRight</Name>
+        <Section>4</Section>
+        <Text>"Page " &amp; [Page] &amp; " of " &amp; [Pages]</Text>
+        <Calculated>-1</Calculated>
+        <Left>6300</Left>
+        <Top>450</Top>
+        <Width>4680</Width>
+        <Height>300</Height>
+        <Align>2</Align>
+        <Font>
+          <Size>8.25</Size>
+        </Font>
+      </Field>
+      <Field>
+        <Name>Label</Name>
+        <Section>5</Section>
+        <Text>="Division " &amp; Level1_ID</Text>
+        <Calculated>-1</Calculated>
+        <Width>10995</Width>
+        <Height>465</Height>
+        <Font>
+          <Name>Times New Roman</Name>
+          <Size>18</Size>
+          <Bold>-1</Bold>
+          <Italic>-1</Italic>
+        </Font>
+      </Field>
+      <Field>
+        <Name>Label2</Name>
+        <Section>5</Section>
+        <Text>=Level1_Desc</Text>
+        <Calculated>-1</Calculated>
+        <Top>390</Top>
+        <Width>10995</Width>
+        <Height>465</Height>
+        <Font>
+          <Name>Times New Roman</Name>
+          <Size>18</Size>
+          <Bold>-1</Bold>
+          <Italic>-1</Italic>
+        </Font>
+      </Field>
+      <Field>
+        <Name>Line7</Name>
+        <Section>7</Section>
+        <Left>360</Left>
+        <Top>360</Top>
+        <Height>555</Height>
+        <BorderStyle>1</BorderStyle>
+        <LineWidth>50</LineWidth>
+        <LineSlant>1</LineSlant>
+        <ZOrder>-3</ZOrder>
+      </Field>
+      <Field>
+        <Name>PageSubHeader</Name>
+        <Section>7</Section>
+        <Text>=FORMAT(Level3_ID,"@@ @@ @@") &amp; " | " &amp; Level3_Desc</Text>
+        <Calculated>-1</Calculated>
+        <Left>360</Left>
+        <Top>360</Top>
+        <Width>4335</Width>
+        <Height>555</Height>
+        <Align>6</Align>
+        <MarginLeft>60</MarginLeft>
+        <Visible>0</Visible>
+        <HideDuplicates>-1</HideDuplicates>
+        <Font>
+          <Size>9.75</Size>
+          <Bold>-1</Bold>
+        </Font>
+        <ZOrder>-2</ZOrder>
+      </Field>
+      <Field>
+        <Name>crew_idLbl</Name>
+        <Section>7</Section>
+        <Text>CREW</Text>
+        <Left>4867</Left>
+        <Top>390</Top>
+        <Width>450</Width>
+        <Height>465</Height>
+        <Align>4</Align>
+        <MarginLeft>30</MarginLeft>
+        <WordWrap>0</WordWrap>
+        <Font>
+          <Name>Arial Narrow</Name>
+          <Size>8.25</Size>
+          <Bold>-1</Bold>
+        </Font>
+      </Field>
+      <Field>
+        <Name>daily_outputLbl</Name>
+        <Section>7</Section>
+        <Text>DAILY OUTPUT</Text>
+        <Left>5227</Left>
+        <Top>390</Top>
+        <Width>735</Width>
+        <Height>465</Height>
+        <Align>4</Align>
+        <Font>
+          <Name>Arial Narrow</Name>
+          <Size>8.25</Size>
+          <Bold>-1</Bold>
+        </Font>
+      </Field>
+      <Field>
+        <Name>std_labor_hourLbl</Name>
+        <Section>7</Section>
+        <Text>LABOR HOURS</Text>
+        <Left>5857</Left>
+        <Top>390</Top>
+        <Width>555</Width>
+        <Height>465</Height>
+        <Align>4</Align>
+        <Font>
+          <Name>Arial Narrow</Name>
+          <Size>8.25</Size>
+          <Bold>-1</Bold>
+        </Font>
+      </Field>
+      <Field>
+        <Name>unitLbl</Name>
+        <Section>7</Section>
+        <Text>UNIT</Text>
+        <Left>6391</Left>
+        <Top>390</Top>
+        <Width>555</Width>
+        <Height>465</Height>
+        <Align>4</Align>
+        <WordWrap>0</WordWrap>
+        <Font>
+          <Name>Arial Narrow</Name>
+          <Size>8.25</Size>
+          <Bold>-1</Bold>
+        </Font>
+      </Field>
+      <Field>
+        <Name>std_total_cost_opLbl</Name>
+        <Section>7</Section>
+        <Text>TOTAL INCL O&amp;P</Text>
+        <Left>9899</Left>
+        <Top>360</Top>
+        <Width>825</Width>
+        <Height>465</Height>
+        <Align>4</Align>
+        <MarginLeft>30</MarginLeft>
+        <Font>
+          <Name>Arial Narrow</Name>
+          <Size>8.25</Size>
+          <Bold>-1</Bold>
+        </Font>
+      </Field>
+      <Field>
+        <Name>PageHeader</Name>
+        <Section>7</Section>
+        <Text>=FORMAT(Level2_ID,"@@ @@") &amp; " | " &amp; Level2_Desc</Text>
+        <Calculated>-1</Calculated>
+        <Width>10995</Width>
+        <Height>375</Height>
+        <Align>0</Align>
+        <BackStyle>1</BackStyle>
+        <BackColor>0</BackColor>
+        <ForeColor>16777215</ForeColor>
+        <BorderStyle>1</BorderStyle>
+        <MarginLeft>50</MarginLeft>
+        <HideDuplicates>-1</HideDuplicates>
+        <WordWrap>0</WordWrap>
+        <Font>
+          <Name>Arial Black</Name>
+          <Size>12</Size>
+          <Bold>-1</Bold>
+        </Font>
+        <ZOrder>18</ZOrder>
+      </Field>
+      <Field>
+        <Name>std_mat_costLbl</Name>
+        <Section>7</Section>
+        <Text>MAT.</Text>
+        <Left>6930</Left>
+        <Top>570</Top>
+        <Width>735</Width>
+        <Height>285</Height>
+        <Align>4</Align>
+        <Font>
+          <Name>Arial Narrow</Name>
+          <Size>8.25</Size>
+          <Bold>-1</Bold>
+        </Font>
+      </Field>
+      <Field>
+        <Name>std_labor_costLbl</Name>
+        <Section>7</Section>
+        <Text>LABOR</Text>
+        <Left>7650</Left>
+        <Top>570</Top>
+        <Width>735</Width>
+        <Height>285</Height>
+        <Align>4</Align>
+        <Font>
+          <Name>Arial Narrow</Name>
+          <Size>8.25</Size>
+          <Bold>-1</Bold>
+        </Font>
+      </Field>
+      <Field>
+        <Name>std_equip_costLbl</Name>
+        <Section>7</Section>
+        <Text>EQUIP.</Text>
+        <Left>8377</Left>
+        <Top>570</Top>
+        <Width>735</Width>
+        <Height>285</Height>
+        <Align>4</Align>
+        <Font>
+          <Name>Arial Narrow</Name>
+          <Size>8.25</Size>
+          <Bold>-1</Bold>
+        </Font>
+      </Field>
+      <Field>
+        <Name>std_total_costLbl</Name>
+        <Section>7</Section>
+        <Text>TOTAL</Text>
+        <Left>9097</Left>
+        <Top>570</Top>
+        <Width>825</Width>
+        <Height>285</Height>
+        <Align>4</Align>
+        <Font>
+          <Name>Arial Narrow</Name>
+          <Size>8.25</Size>
+          <Bold>-1</Bold>
+        </Font>
+      </Field>
+      <Field>
+        <Name>Line5</Name>
+        <Section>7</Section>
+        <Left>6390</Left>
+        <Top>360</Top>
+        <Height>555</Height>
+        <BorderStyle>1</BorderStyle>
+        <LineWidth>50</LineWidth>
+        <LineSlant>1</LineSlant>
+        <ZOrder>9</ZOrder>
+      </Field>
+      <Field>
+        <Name>Line4</Name>
+        <Section>7</Section>
+        <Left>4860</Left>
+        <Top>360</Top>
+        <Height>555</Height>
+        <BackStyle>1</BackStyle>
+        <BorderStyle>1</BorderStyle>
+        <LineWidth>50</LineWidth>
+        <LineSlant>1</LineSlant>
+        <ZOrder>11</ZOrder>
+      </Field>
+      <Field>
+        <Name>Label1</Name>
+        <Section>7</Section>
+        <Text>STANDARD BARE COSTS</Text>
+        <Left>6930</Left>
+        <Top>375</Top>
+        <Width>2970</Width>
+        <Height>225</Height>
+        <Align>4</Align>
+        <Font>
+          <Name>Arial Narrow</Name>
+          <Size>8.25</Size>
+          <Bold>-1</Bold>
+        </Font>
+        <ZOrder>16</ZOrder>
+      </Field>
+      <Field>
+        <Name>Line6</Name>
+        <Section>7</Section>
+        <Left>9900</Left>
+        <Top>360</Top>
+        <Height>555</Height>
+        <BorderStyle>1</BorderStyle>
+        <LineWidth>50</LineWidth>
+        <LineSlant>1</LineSlant>
+        <ZOrder>17</ZOrder>
+      </Field>
+      <Field>
+        <Name>PageSubHeader1</Name>
+        <Section>9</Section>
+        <Text>=FORMAT(Level3_ID,"@@ @@ @@") &amp; " | " &amp; Level3_Desc</Text>
+        <Calculated>-1</Calculated>
+        <Left>360</Left>
+        <Width>9555</Width>
+        <Height>600</Height>
+        <Align>6</Align>
+        <MarginLeft>60</MarginLeft>
+        <HideDuplicates>-1</HideDuplicates>
+        <Font>
+          <Name>Arial Black</Name>
+          <Size>12</Size>
+          <Bold>-1</Bold>
+        </Font>
+        <ZOrder>-2</ZOrder>
+      </Field>
+      <Field>
+        <Name>Line16</Name>
+        <Section>9</Section>
+        <Left>360</Left>
+        <Height>600</Height>
+        <BorderStyle>1</BorderStyle>
+        <LineWidth>50</LineWidth>
+        <LineSlant>1</LineSlant>
+        <ZOrder>19</ZOrder>
+      </Field>
+      <Field>
+        <Name>Line17</Name>
+        <Section>9</Section>
+        <Left>9900</Left>
+        <Height>600</Height>
+        <BorderStyle>1</BorderStyle>
+        <LineWidth>50</LineWidth>
+        <LineSlant>1</LineSlant>
+        <ZOrder>19</ZOrder>
+      </Field>
+      <Field>
+        <Name>Line18</Name>
+        <Section>7</Section>
+        <Left>5310</Left>
+        <Top>360</Top>
+        <Height>555</Height>
+        <BorderStyle>1</BorderStyle>
+        <LineSlant>2</LineSlant>
+      </Field>
+      <Field>
+        <Name>Line19</Name>
+        <Section>7</Section>
+        <Left>5857</Left>
+        <Top>360</Top>
+        <Height>555</Height>
+        <BorderStyle>1</BorderStyle>
+        <LineSlant>2</LineSlant>
+      </Field>
+      <Field>
+        <Name>Line20</Name>
+        <Section>7</Section>
+        <Left>6930</Left>
+        <Top>360</Top>
+        <Height>555</Height>
+        <BorderStyle>1</BorderStyle>
+        <LineSlant>2</LineSlant>
+      </Field>
+      <Field>
+        <Name>Line21</Name>
+        <Section>7</Section>
+        <Left>10709</Left>
+        <Top>360</Top>
+        <Height>555</Height>
+        <BorderStyle>1</BorderStyle>
+        <LineSlant>2</LineSlant>
+      </Field>
+      <Field>
+        <Name>Line22</Name>
+        <Section>7</Section>
+        <Top>900</Top>
+        <Width>10995</Width>
+        <BorderStyle>1</BorderStyle>
+        <LineWidth>50</LineWidth>
+        <LineSlant>2</LineSlant>
+      </Field>
+      <Field>
+        <Name>Line23</Name>
+        <Section>9</Section>
+        <Left>10709</Left>
+        <Height>600</Height>
+        <BorderStyle>1</BorderStyle>
+        <LineSlant>2</LineSlant>
+      </Field>
+      <Field>
+        <Name>Line24</Name>
+        <Section>9</Section>
+        <Top>600</Top>
+        <Width>10995</Width>
+        <BorderStyle>1</BorderStyle>
+        <LineWidth>50</LineWidth>
+        <LineSlant>2</LineSlant>
+      </Field>
+      <Field>
+        <Name>Line25</Name>
+        <Section>10</Section>
+        <Width>10995</Width>
+        <BorderStyle>1</BorderStyle>
+        <LineWidth>50</LineWidth>
+        <LineSlant>2</LineSlant>
+      </Field>
+      <Field>
+        <Name>FooterLeft1</Name>
+        <Section>4</Section>
+        <Text>Output_Desc</Text>
+        <Calculated>-1</Calculated>
+        <Left>3240</Left>
+        <Top>450</Top>
+        <Width>4680</Width>
+        <Height>300</Height>
+        <Align>1</Align>
+        <Font>
+          <Size>8.25</Size>
+        </Font>
+      </Field>
+      <Field>
+        <Name>txtRefID</Name>
+        <Section>0</Section>
+        <Text>R</Text>
+        <Format>@</Format>
+        <Left>4600</Left>
+        <Top>40</Top>
+        <Width>210</Width>
+        <Height>210</Height>
+        <Align>1</Align>
+        <BackStyle>1</BackStyle>
+        <BorderStyle>1</BorderStyle>
+        <LineWidth>24</LineWidth>
+        <Font>
+          <Name>Arial Narrow</Name>
+          <Size>8.25</Size>
+          <Bold>-1</Bold>
+        </Font>
+      </Field>
+      <Field>
+        <Name>txtGraphicRef</Name>
+        <Section>0</Section>
+        <Text>=nz(Graphic_Ref) &gt; " "</Text>
+        <Calculated>-1</Calculated>
+        <CheckBox>3</CheckBox>
+        <Left>4590</Left>
+        <Top>45</Top>
+        <Width>195</Width>
+        <Height>195</Height>
+        <Align>2</Align>
+        <Font>
+          <Name>Wingdings</Name>
+        </Font>
+      </Field>
+    </Fields>
+  </Report>
+</Reports>

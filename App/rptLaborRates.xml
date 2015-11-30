@@ -1,0 +1,416 @@
+<?xml version="1.0" encoding="windows-1252" ?>
+<Reports>
+<!--
+///////////////////////////////////////////////////////
+//
+// VSReport Report Definition File
+//
+// This file contains the following reports:
+//
+//   1) Labor Rates
+//
+///////////////////////////////////////////////////////
+-->
+
+  <!-- Report *** Labor Rates *** -->
+  <Report>
+    <Name>Labor Rates</Name>
+    <DataSource>
+      <ConnectionString>Provider=SQLOLEDB.1;Persist Security Info=False;User ID=durfeert;Initial Catalog=CCDdev1;Data Source=BINCMDGKNGENG01</ConnectionString>
+      <RecordSource>exec sp_LaborRatesMaxStart 
+@trade_id='ASBE', @trade_group_code='', @city='', @state='AK', 
+@start_date=' ', @term_date=' ', @includehistory = 1, @maxrowcount = 1000</RecordSource>
+    </DataSource>
+    <Layout>
+      <Width>10905</Width>
+      <MarginLeft>720</MarginLeft>
+      <MarginTop>720</MarginTop>
+      <MarginRight>720</MarginRight>
+      <MarginBottom>720</MarginBottom>
+      <Orientation>1</Orientation>
+    </Layout>
+    <Groups>
+      <Group>
+        <Name>Group 1</Name>
+        <GroupBy>trade_id</GroupBy>
+        <Sort>1</Sort>
+      </Group>
+      <Group>
+        <Name>Group 2</Name>
+        <GroupBy>state_code</GroupBy>
+        <Sort>1</Sort>
+      </Group>
+      <Group>
+        <Name>Group 3</Name>
+        <GroupBy>city</GroupBy>
+        <Sort>1</Sort>
+      </Group>
+    </Groups>
+    <Sections>
+      <Section>
+        <Name>Detail</Name>
+        <Height>270</Height>
+        <OnPrint>bBolded = (start_date = MaxStartDate)
+txtState.FontBold = bBolded
+txtCity.FontBold = bBolded
+txtStart.FontBold = bBolded
+txtTerm.FontBold = bBolded
+txtUnionBase.FontBold = bBolded
+txtUnionFringe.FontBold = bBolded
+txtUnionTotal.FontBold = bBolded
+txtTradeGroup.FontBold = bBolded</OnPrint>
+      </Section>
+      <Section>
+        <Name>Header</Name>
+        <Type>1</Type>
+        <Height>10</Height>
+        <Visible>0</Visible>
+      </Section>
+      <Section>
+        <Name>Footer</Name>
+        <Type>2</Type>
+        <Visible>0</Visible>
+      </Section>
+      <Section>
+        <Name>Page Header</Name>
+        <Type>3</Type>
+        <Height>780</Height>
+      </Section>
+      <Section>
+        <Name>Page Footer</Name>
+        <Type>4</Type>
+        <Height>500</Height>
+      </Section>
+      <Section>
+        <Name>Group 0 Header</Name>
+        <Type>5</Type>
+        <Height>1065</Height>
+        <Repeat>-1</Repeat>
+      </Section>
+      <Section>
+        <Name>Group 0 Footer</Name>
+        <Type>6</Type>
+        <Height>60</Height>
+        <ForcePageBreak>0</ForcePageBreak>
+      </Section>
+      <Section>
+        <Name>Group 1 Header</Name>
+        <Type>7</Type>
+        <Visible>0</Visible>
+      </Section>
+      <Section>
+        <Name>Group 1 Footer</Name>
+        <Type>8</Type>
+        <Height>75</Height>
+        <Visible>0</Visible>
+      </Section>
+      <Section>
+        <Name>Group 2 Header</Name>
+        <Type>9</Type>
+      </Section>
+      <Section>
+        <Name>Group 2 Footer</Name>
+        <Type>10</Type>
+        <Height>210</Height>
+      </Section>
+    </Sections>
+    <Fields>
+      <Field>
+        <Name>TitleLbl</Name>
+        <Section>3</Section>
+        <Text>Labor Rates</Text>
+        <Top>5</Top>
+        <Width>7215</Width>
+        <Height>600</Height>
+        <Align>6</Align>
+        <Font>
+          <Name>Times New Roman</Name>
+          <Size>24</Size>
+          <Bold>-1</Bold>
+        </Font>
+      </Field>
+      <Field>
+        <Name>FooterLeft</Name>
+        <Section>4</Section>
+        <Text>Now()</Text>
+        <Calculated>-1</Calculated>
+        <Top>180</Top>
+        <Width>4680</Width>
+        <Height>300</Height>
+        <Align>0</Align>
+        <Font>
+          <Size>8.25</Size>
+        </Font>
+      </Field>
+      <Field>
+        <Name>FooterRight</Name>
+        <Section>4</Section>
+        <Text>"Page " &amp; [Page] &amp; " of " &amp; [Pages]</Text>
+        <Calculated>-1</Calculated>
+        <Left>6210</Left>
+        <Top>180</Top>
+        <Width>4680</Width>
+        <Height>300</Height>
+        <Align>2</Align>
+        <Font>
+          <Size>8.25</Size>
+        </Font>
+      </Field>
+      <Field>
+        <Name>cci_mat_equ_idCtl</Name>
+        <Section>5</Section>
+        <Text>=trade_id &amp; ": " &amp; trade_desc</Text>
+        <Calculated>-1</Calculated>
+        <Top>15</Top>
+        <Width>10905</Width>
+        <Height>450</Height>
+        <Align>3</Align>
+        <Font>
+          <Size>14.25</Size>
+          <Bold>-1</Bold>
+        </Font>
+      </Field>
+      <Field>
+        <Name>txtCity</Name>
+        <Section>0</Section>
+        <Text>city</Text>
+        <Calculated>-1</Calculated>
+        <Left>630</Left>
+        <Width>2625</Width>
+        <Height>270</Height>
+        <Align>0</Align>
+      </Field>
+      <Field>
+        <Name>txtState</Name>
+        <Section>0</Section>
+        <Text>State_Code</Text>
+        <Calculated>-1</Calculated>
+        <Width>555</Width>
+        <Height>270</Height>
+        <Align>0</Align>
+      </Field>
+      <Field>
+        <Name>txtStart</Name>
+        <Section>0</Section>
+        <Text>start_date</Text>
+        <Calculated>-1</Calculated>
+        <Left>3330</Left>
+        <Width>1185</Width>
+        <Height>270</Height>
+        <Align>0</Align>
+      </Field>
+      <Field>
+        <Name>txtTerm</Name>
+        <Section>0</Section>
+        <Text>term_date</Text>
+        <Calculated>-1</Calculated>
+        <Left>4590</Left>
+        <Width>1185</Width>
+        <Height>270</Height>
+        <Align>0</Align>
+      </Field>
+      <Field>
+        <Name>txtUnionBase</Name>
+        <Section>0</Section>
+        <Text>union_base_hrly</Text>
+        <Calculated>-1</Calculated>
+        <Format>#,##0.00</Format>
+        <Left>5850</Left>
+        <Width>915</Width>
+        <Height>270</Height>
+        <Align>2</Align>
+      </Field>
+      <Field>
+        <Name>txtUnionFringe</Name>
+        <Section>0</Section>
+        <Text>union_fringe_hrly</Text>
+        <Calculated>-1</Calculated>
+        <Format>#,##0.00</Format>
+        <Left>6840</Left>
+        <Width>915</Width>
+        <Height>270</Height>
+        <Align>2</Align>
+      </Field>
+      <Field>
+        <Name>txtUnionTotal</Name>
+        <Section>0</Section>
+        <Text>tot_union</Text>
+        <Calculated>-1</Calculated>
+        <Format>#,##0.00</Format>
+        <Left>7830</Left>
+        <Width>915</Width>
+        <Height>270</Height>
+        <Align>2</Align>
+      </Field>
+      <Field>
+        <Name>txtTradeGroup</Name>
+        <Section>0</Section>
+        <Text>trade_group_code</Text>
+        <Calculated>-1</Calculated>
+        <Left>9450</Left>
+        <Width>1185</Width>
+        <Height>270</Height>
+        <Align>0</Align>
+      </Field>
+      <Field>
+        <Name>chkEstInd</Name>
+        <Section>0</Section>
+        <Text>estimated_ind</Text>
+        <Calculated>-1</Calculated>
+        <Format>Yes/No</Format>
+        <CheckBox>1</CheckBox>
+        <Left>8820</Left>
+        <Width>555</Width>
+        <Height>270</Height>
+        <Align>1</Align>
+        <Font>
+          <Name>Wingdings</Name>
+          <Size>9.75</Size>
+        </Font>
+      </Field>
+      <Field>
+        <Name>Label9</Name>
+        <Section>5</Section>
+        <Text>State</Text>
+        <Top>450</Top>
+        <Width>540</Width>
+        <Height>465</Height>
+        <Align>3</Align>
+        <Font>
+          <Size>8.25</Size>
+          <Bold>-1</Bold>
+        </Font>
+      </Field>
+      <Field>
+        <Name>Label10</Name>
+        <Section>5</Section>
+        <Text>City</Text>
+        <Left>630</Left>
+        <Top>450</Top>
+        <Width>2625</Width>
+        <Height>465</Height>
+        <Align>3</Align>
+        <Font>
+          <Size>8.25</Size>
+          <Bold>-1</Bold>
+        </Font>
+      </Field>
+      <Field>
+        <Name>Line</Name>
+        <Section>5</Section>
+        <Top>990</Top>
+        <Width>10890</Width>
+        <BorderStyle>1</BorderStyle>
+        <LineSlant>2</LineSlant>
+      </Field>
+      <Field>
+        <Name>Label11</Name>
+        <Section>5</Section>
+        <Text>Start Date</Text>
+        <Left>3330</Left>
+        <Top>450</Top>
+        <Width>1185</Width>
+        <Height>465</Height>
+        <Align>3</Align>
+        <Font>
+          <Size>8.25</Size>
+          <Bold>-1</Bold>
+        </Font>
+      </Field>
+      <Field>
+        <Name>Label12</Name>
+        <Section>5</Section>
+        <Text>Term Date</Text>
+        <Left>4590</Left>
+        <Top>450</Top>
+        <Width>1185</Width>
+        <Height>465</Height>
+        <Align>3</Align>
+        <Font>
+          <Size>8.25</Size>
+          <Bold>-1</Bold>
+        </Font>
+      </Field>
+      <Field>
+        <Name>Label13</Name>
+        <Section>5</Section>
+        <Text>Union Fringe</Text>
+        <Left>6840</Left>
+        <Top>450</Top>
+        <Width>915</Width>
+        <Height>465</Height>
+        <Align>5</Align>
+        <Font>
+          <Size>8.25</Size>
+          <Bold>-1</Bold>
+        </Font>
+      </Field>
+      <Field>
+        <Name>Label14</Name>
+        <Section>5</Section>
+        <Text>Union Base</Text>
+        <Left>5940</Left>
+        <Top>450</Top>
+        <Width>825</Width>
+        <Height>465</Height>
+        <Align>5</Align>
+        <Font>
+          <Size>8.25</Size>
+          <Bold>-1</Bold>
+        </Font>
+      </Field>
+      <Field>
+        <Name>Label15</Name>
+        <Section>5</Section>
+        <Text>Total Union</Text>
+        <Left>7920</Left>
+        <Top>450</Top>
+        <Width>825</Width>
+        <Height>465</Height>
+        <Align>5</Align>
+        <Font>
+          <Size>8.25</Size>
+          <Bold>-1</Bold>
+        </Font>
+      </Field>
+      <Field>
+        <Name>Label16</Name>
+        <Section>5</Section>
+        <Text>Est.</Text>
+        <Left>8820</Left>
+        <Top>450</Top>
+        <Width>555</Width>
+        <Height>465</Height>
+        <Align>4</Align>
+        <Font>
+          <Size>8.25</Size>
+          <Bold>-1</Bold>
+        </Font>
+      </Field>
+      <Field>
+        <Name>Label17</Name>
+        <Section>5</Section>
+        <Text>Trade Group</Text>
+        <Left>9450</Left>
+        <Top>450</Top>
+        <Width>1185</Width>
+        <Height>465</Height>
+        <Align>3</Align>
+        <Font>
+          <Size>8.25</Size>
+          <Bold>-1</Bold>
+        </Font>
+      </Field>
+      <Field>
+        <Name>Picture</Name>
+        <Section>3</Section>
+        <Left>8640</Left>
+        <Top>90</Top>
+        <Width>2250</Width>
+        <Height>630</Height>
+        <Align>2</Align>
+        <Picture>rsmeanslogo.gif</Picture>
+      </Field>
+    </Fields>
+  </Report>
+</Reports>
